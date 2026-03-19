@@ -1,9 +1,10 @@
 import streamlit as st
 import joblib
-import numpy as np
+import pandas as pd
 
-# Load trained model
+# Load model and columns
 model = joblib.load("mental_health_model.pkl")
+columns = joblib.load("columns.pkl")
 
 st.set_page_config(page_title="Mental Health Prediction", layout="centered")
 
@@ -24,36 +25,12 @@ benefits = st.selectbox("Company Benefits", ["Yes", "No"])
 care_options = st.selectbox("Care Options Available", ["Yes", "No"])
 
 # -----------------------------
-# ENCODE INPUT (IMPORTANT)
+# PREDICTION
 # -----------------------------
-
-# Convert inputs to numbers (same as training)
-gender = 1 if gender == "Male" else 0
-family_history = 1 if family_history == "Yes" else 0
-remote_work = 1 if remote_work == "Yes" else 0
-benefits = 1 if benefits == "Yes" else 0
-care_options = 1 if care_options == "Yes" else 0
-
-# Work interference encoding
-work_map = {
-    "Never": 0,
-    "Rarely": 1,
-    "Sometimes": 2,
-    "Often": 3
-}
-work_interfere = work_map[work_interfere]
-
-# Stress score (feature engineering same as training)
-stress_score = 1 if work_interfere >= 2 else 0
 
 if st.button("Predict"):
 
-    import pandas as pd
-    import joblib
-
-    model = joblib.load("mental_health_model.pkl")
-    columns = joblib.load("columns.pkl")
-
+    # Keep values as strings (IMPORTANT)
     input_dict = {
         "Age": age,
         "Gender": gender,
@@ -64,12 +41,19 @@ if st.button("Predict"):
         "care_options": care_options
     }
 
+    # Convert to DataFrame
     input_df = pd.DataFrame([input_dict])
+
+    # Apply encoding same as training
     input_df = pd.get_dummies(input_df)
+
+    # Match columns
     input_df = input_df.reindex(columns=columns, fill_value=0)
 
+    # Prediction
     prediction = model.predict(input_df)[0]
 
+    # Output
     if prediction == 1:
         st.error("⚠️ High Risk of Mental Health Issues")
         st.write("👉 Suggestions:")
