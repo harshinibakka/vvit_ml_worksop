@@ -54,7 +54,7 @@ if st.button("Predict"):
     prediction = model.predict(input_df)[0]
 
     # Output
-    if prediction == 1:
+    if prediction == 0:
         st.error("⚠️ High Risk of Mental Health Issues")
         st.write("👉 Suggestions:")
         st.write("- Improve work-life balance")
