@@ -46,19 +46,29 @@ work_interfere = work_map[work_interfere]
 # Stress score (feature engineering same as training)
 stress_score = 1 if work_interfere >= 2 else 0
 
-# -----------------------------
-# FINAL INPUT ARRAY
-# -----------------------------
-
-input_data = np.array([[age, gender, family_history, work_interfere,
-                        remote_work, benefits, care_options, stress_score]])
-
-# -----------------------------
-# PREDICTION
-# -----------------------------
-
 if st.button("Predict"):
-    prediction = model.predict(input_data)[0]
+
+    import pandas as pd
+    import joblib
+
+    model = joblib.load("mental_health_model.pkl")
+    columns = joblib.load("columns.pkl")
+
+    input_dict = {
+        "Age": age,
+        "Gender": gender,
+        "family_history": family_history,
+        "work_interfere": work_interfere,
+        "remote_work": remote_work,
+        "benefits": benefits,
+        "care_options": care_options
+    }
+
+    input_df = pd.DataFrame([input_dict])
+    input_df = pd.get_dummies(input_df)
+    input_df = input_df.reindex(columns=columns, fill_value=0)
+
+    prediction = model.predict(input_df)[0]
 
     if prediction == 1:
         st.error("⚠️ High Risk of Mental Health Issues")
