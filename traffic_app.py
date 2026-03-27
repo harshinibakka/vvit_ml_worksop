@@ -23,7 +23,7 @@ if st.button("Predict"):
 
   if prediction[0] == 0:
         st.success("Low Severity")
-    elif prediction[0] == 1:
+  elif prediction[0] == 1:
         st.warning("Medium Severity")
-    else:
+  else:
         st.error("High Severity")
