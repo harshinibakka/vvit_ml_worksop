@@ -20,10 +20,10 @@ weather = st.slider("Weather Condition (0-4)", 0, 4, 2)
 if st.button("Predict"):
     input_data = np.array([[lat, lng, hour, day, weather]])
     prediction = model.predict(input_data)
-
-  if prediction[0] == 0:
+    
+    if prediction[0] == 0:
         st.success("Low Severity")
-  elif prediction[0] == 1 :
+    elif prediction[0] == 1 :
         st.warning("Medium Severity")
-  else:
+    else:
         st.error("High Severity")
