@@ -55,9 +55,6 @@ if st.button("Predict"):
     confidence = max(proba)
 
     # Output
-   proba = model.predict_proba(input_df)[0]
-confidence = max(proba)
-
 if confidence > 0.75:
 
     if proba[0] > proba[1]:
