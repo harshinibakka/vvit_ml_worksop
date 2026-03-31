@@ -50,27 +50,26 @@ if st.button("Predict"):
     # Match columns
     input_df = input_df.reindex(columns=columns, fill_value=0)
 
-    # Prediction
-    proba = model.predict_proba(input_df)[0]
-    confidence = max(proba)
 
-    # Output
+# Prediction with probability
+proba = model.predict_proba(input_df)[0]
+confidence = max(proba)
+
 if confidence > 0.75:
-
     if proba[0] > proba[1]:
         st.error("🔴 High Risk of Mental Health Issues")
         st.write("👉 Suggestions:")
         st.write("- Improve work-life balance")
         st.write("- Seek professional help")
         st.write("- Talk to HR / support system")
-
     else:
         st.success("🟢 Low Risk of Mental Health Issues")
         st.write("👉 Keep maintaining a healthy lifestyle 😊")
-
 else:
     st.warning("🟡 Medium Risk of Mental Health Issues")
     st.write("👉 Suggestions:")
     st.write("- Take short breaks")
     st.write("- Maintain work-life balance")
     st.write("- Talk to someone you trust")
+
+    
