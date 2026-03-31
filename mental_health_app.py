@@ -52,28 +52,25 @@ if st.button("Predict"):
     # -----------------------------
     # PROBABILITY BASED PREDICTION
     # -----------------------------
-    proba = model.predict_proba(input_df)[0]
-    confidence = max(proba)
+   proba = model.predict_proba(input_df)[0]
 
-    # -----------------------------
-    # OUTPUT
-    # -----------------------------
-    if confidence > 0.75:
+# proba[0] = High Risk probability
+# proba[1] = Low Risk probability
 
-        if proba[0] > proba[1]:
-            st.error("🔴 High Risk of Mental Health Issues")
-            st.write("👉 Suggestions:")
-            st.write("- Improve work-life balance")
-            st.write("- Seek professional help")
-            st.write("- Talk to HR / support system")
+if proba[0] >= 0.6:
+    st.error("🔴 High Risk of Mental Health Issues")
+    st.write("👉 Suggestions:")
+    st.write("- Improve work-life balance")
+    st.write("- Seek professional help")
+    st.write("- Talk to HR / support system")
 
-        else:
-            st.success("🟢 Low Risk of Mental Health Issues")
-            st.write("👉 Keep maintaining a healthy lifestyle 😊")
+elif proba[0] >= 0.3:
+    st.warning("🟡 Medium Risk of Mental Health Issues")
+    st.write("👉 Suggestions:")
+    st.write("- Take short breaks")
+    st.write("- Maintain work-life balance")
+    st.write("- Talk to someone you trust")
 
-    else:
-        st.warning("🟡 Medium Risk of Mental Health Issues")
-        st.write("👉 Suggestions:")
-        st.write("- Take short breaks")
-        st.write("- Maintain work-life balance")
-        st.write("- Talk to someone you trust")
+else:
+    st.success("🟢 Low Risk of Mental Health Issues")
+    st.write("👉 Keep maintaining a healthy lifestyle 😊")
