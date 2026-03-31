@@ -47,14 +47,14 @@ if st.button("Predict"):
     # ✅ IMPORTANT: SAME INDENT
     proba = model.predict_proba(input_df)[0]
 
-    if proba[0] >= 0.6:
+    if proba[0] >= 0.7:
         st.error("🔴 High Risk of Mental Health Issues")
         st.write("👉 Suggestions:")
         st.write("- Improve work-life balance")
         st.write("- Seek professional help")
         st.write("- Talk to HR / support system")
 
-    elif proba[0] >= 0.3:
+    elif proba[0] >= 0.4:
         st.warning("🟡 Medium Risk of Mental Health Issues")
         st.write("👉 Suggestions:")
         st.write("- Take short breaks")
