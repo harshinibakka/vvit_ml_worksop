@@ -47,15 +47,20 @@ if st.button("Predict"):
     # ✅ IMPORTANT: SAME INDENT
     proba = model.predict_proba(input_df)[0]
     st.write("Probability:", proba)
+    
+    confidence = max(proba)
+    if confidence >= 0.6:
+        if proba[0] > proba[1]:
+            st.error("🔴 High Risk of Mental Health Issues")
+            st.write("👉 Suggestions:")
+            st.write("- Improve work-life balance")
+            st.write("- Seek professional help")
+            st.write("- Talk to HR / support system")
+        else:
+            st.success("🟢 Low Risk of Mental Health Issues")
+            st.write("👉 Keep maintaining a healthy lifestyle 😊")
 
-    if proba[0] >= 0.7:
-        st.error("🔴 High Risk of Mental Health Issues")
-        st.write("👉 Suggestions:")
-        st.write("- Improve work-life balance")
-        st.write("- Seek professional help")
-        st.write("- Talk to HR / support system")
-
-    elif proba[0] >= 0.4:
+    elif confidence >= 0.5:
         st.warning("🟡 Medium Risk of Mental Health Issues")
         st.write("👉 Suggestions:")
         st.write("- Take short breaks")
@@ -63,5 +68,5 @@ if st.button("Predict"):
         st.write("- Talk to someone you trust")
 
     else:
-        st.success("🟢 Low Risk of Mental Health Issues")
-        st.write("👉 Keep maintaining a healthy lifestyle 😊")
+        st.info("⚪ Uncertain Prediction (Model not confident)")
+   
