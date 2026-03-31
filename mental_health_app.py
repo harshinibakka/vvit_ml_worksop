@@ -2,7 +2,9 @@ import streamlit as st
 import joblib
 import pandas as pd
 
-# Load model and columns
+# -----------------------------
+# LOAD MODEL
+# -----------------------------
 model = joblib.load("mental_health_model.pkl")
 columns = joblib.load("columns.pkl")
 
@@ -13,8 +15,7 @@ st.write("Fill in the details to check mental health risk")
 
 # -----------------------------
 # INPUT FIELDS
-# ----------------------------
-
+# -----------------------------
 age = st.slider("Age", 18, 60, 25)
 
 gender = st.selectbox("Gender", ["Male", "Female"])
@@ -27,10 +28,8 @@ care_options = st.selectbox("Care Options Available", ["Yes", "No"])
 # -----------------------------
 # PREDICTION
 # -----------------------------
-
 if st.button("Predict"):
 
-    # Keep values as strings (IMPORTANT)
     input_dict = {
         "Age": age,
         "Gender": gender,
@@ -44,32 +43,37 @@ if st.button("Predict"):
     # Convert to DataFrame
     input_df = pd.DataFrame([input_dict])
 
-    # Apply encoding same as training
+    # Encoding
     input_df = pd.get_dummies(input_df)
 
     # Match columns
     input_df = input_df.reindex(columns=columns, fill_value=0)
 
+    # -----------------------------
+    # PROBABILITY BASED PREDICTION
+    # -----------------------------
+    proba = model.predict_proba(input_df)[0]
+    confidence = max(proba)
 
-# Prediction with probability
-proba = model.predict_proba(input_df)[0]
-confidence = max(proba)
+    # -----------------------------
+    # OUTPUT
+    # -----------------------------
+    if confidence > 0.75:
 
-if confidence > 0.75:
-    if proba[0] > proba[1]:
-        st.error("🔴 High Risk of Mental Health Issues")
-        st.write("👉 Suggestions:")
-        st.write("- Improve work-life balance")
-        st.write("- Seek professional help")
-        st.write("- Talk to HR / support system")
+        if proba[0] > proba[1]:
+            st.error("🔴 High Risk of Mental Health Issues")
+            st.write("👉 Suggestions:")
+            st.write("- Improve work-life balance")
+            st.write("- Seek professional help")
+            st.write("- Talk to HR / support system")
+
+        else:
+            st.success("🟢 Low Risk of Mental Health Issues")
+            st.write("👉 Keep maintaining a healthy lifestyle 😊")
+
     else:
-        st.success("🟢 Low Risk of Mental Health Issues")
-        st.write("👉 Keep maintaining a healthy lifestyle 😊")
-else:
-    st.warning("🟡 Medium Risk of Mental Health Issues")
-    st.write("👉 Suggestions:")
-    st.write("- Take short breaks")
-    st.write("- Maintain work-life balance")
-    st.write("- Talk to someone you trust")
-
-    
+        st.warning("🟡 Medium Risk of Mental Health Issues")
+        st.write("👉 Suggestions:")
+        st.write("- Take short breaks")
+        st.write("- Maintain work-life balance")
+        st.write("- Talk to someone you trust")
