@@ -13,7 +13,7 @@ st.write("Fill in the details to check mental health risk")
 
 # -----------------------------
 # INPUT FIELDS
-# -----------------------------
+# ----------------------------
 
 age = st.slider("Age", 18, 60, 25)
 
@@ -51,15 +51,24 @@ if st.button("Predict"):
     input_df = input_df.reindex(columns=columns, fill_value=0)
 
     # Prediction
-    prediction = model.predict(input_df)[0]
+    proba = model.predict_proba(input_df)[0]
+    confidence = max(proba)
 
     # Output
-    if prediction == 0:
-        st.error("⚠️ High Risk of Mental Health Issues")
+    if confidence > 0.75:
+    if proba[0] > proba[1]:
+        st.error("🔴 High Risk of Mental Health Issues")
         st.write("👉 Suggestions:")
         st.write("- Improve work-life balance")
         st.write("- Seek professional help")
         st.write("- Talk to HR / support system")
     else:
-        st.success("✅ Low Risk of Mental Health Issues")
+        st.success("🟢 Low Risk of Mental Health Issues")
         st.write("👉 Keep maintaining a healthy lifestyle 😊")
+
+else:
+    st.warning("🟡 Medium Risk of Mental Health Issues")
+    st.write("👉 Suggestions:")
+    st.write("- Take short breaks")
+    st.write("- Maintain work-life balance")
+    st.write("- Talk to someone you trust")
