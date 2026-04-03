@@ -95,7 +95,13 @@ user_input = st.text_input("Talk to me... I'm here for you 🤍")
 # CHATBOT FUNCTION (ONLY LOGIC)
 # -----------------------------
 def chatbot_reply(user_text):
-    text = user_text.lower()
+    text = user_text.lower
+
+    # 🔥 GET CONTEXT FROM CHAT HISTORY
+history = st.session_state.chat_history[-6:]  # last 6 messages
+
+previous_msgs = [msg for speaker, msg in history if speaker == "You"]
+context = " ".join(previous_msgs).lower()
 
     # Get previous context
     history = st.session_state.chat_history[-6:]
