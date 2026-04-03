@@ -93,33 +93,48 @@ user_input = st.text_input("Talk to me... I'm here for you 🤍")
 def chatbot_reply(user_text):
     text = user_text.lower()
 
-    if any(word in text for word in ["sad", "lonely", "depressed", "cry"]):
-        return "I'm really sorry you're feeling this way 🤍 I'm here with you. Do you want to share what happened?"
+    # Get previous context
+    history = st.session_state.chat_history[-6:]
+    previous_msgs = [msg for speaker, msg in history if speaker == "You"]
+    context = " ".join(previous_msgs).lower()
 
-    elif any(word in text for word in ["stress", "tired", "pressure", "overwhelmed"]):
-        return "That sounds really heavy… 😔 You're handling a lot. Tell me what's stressing you."
+    name = "Paapu"  # You can later make this dynamic
 
+    # -----------------------------
+    # DEEP EMOTIONAL RESPONSES
+    # -----------------------------
+
+    # SAD / LOW
+    if any(word in text for word in ["sad", "lonely", "depressed", "cry", "not okay"]):
+        return f"{name}… 🤍 I can feel that something is heavy in your heart… you don’t have to carry it alone. I’m right here with you. Tell me what’s been hurting you…"
+
+    # STRESS
+    elif any(word in text for word in ["stress", "stressed", "pressure", "tired", "overwhelmed"]):
+        return f"Hey {name}… 😔 that sounds really exhausting… like you’ve been holding too much inside. It’s okay to feel this way. I’m here… what’s been stressing you the most?"
+
+    # ANXIETY
     elif any(word in text for word in ["anxiety", "worried", "fear", "panic"]):
-        return "I understand… take a slow breath 🌿 You're safe. What’s making you feel this way?"
+        return f"{name}… 🌿 I understand… that uneasy feeling can be really hard. Just breathe slowly… you’re safe right now. Tell me what’s making you feel this way…"
 
-    elif any(word in text for word in ["happy", "good", "better"]):
-        return "That’s nice to hear 😊 I’m really glad. Want to share more?"
+    # CONTEXT CONTINUATION (MAGIC 💫)
+    elif "stress" in context:
+        return f"I see {name}… so this is part of what’s been weighing on you… 😔 That must be really hard. Do you feel like it’s getting too much lately?"
 
+    elif "sad" in context or "hurt" in context:
+        return f"That really sounds painful… 💔 I’m so sorry you're going through this. You don’t have to hide it here… I’m listening."
+
+    # STUDIES
+    elif any(word in text for word in ["study", "studies", "exam", "college"]):
+        return f"Ahh {name}… studies can feel really overwhelming sometimes 😣 especially when everything piles up. Are exams coming or is it just too much pressure?"
+
+    # ALONE FEELING
     elif any(word in text for word in ["alone", "no one", "nobody"]):
-        return "Hey… you're not alone 🤍 I'm here with you."
+        return f"Hey… look at me {name} 🤍 you are not alone right now. I’m here with you… and I’m not going anywhere. You can talk to me…"
 
+    # HAPPY
+    elif any(word in text for word in ["happy", "good", "better"]):
+        return f"Aww {name} 😊 that makes me really happy to hear… tell me what made you feel this way?"
+
+    # DEFAULT
     else:
-        return "I'm here for you 💙 Tell me anything…"
-
-# Store chat
-if user_input:
-    response = chatbot_reply(user_input)
-    st.session_state.chat_history.append(("You", user_input))
-    st.session_state.chat_history.append(("Bot", response))
-
-# Display chat
-for speaker, msg in st.session_state.chat_history:
-    if speaker == "You":
-        st.write(f"🧍‍♀️ **You:** {msg}")
-    else:
-        st.write(f"🤖 **Companion:** {msg}")
+        return f"I'm right here with you {name} 💙 whatever you're feeling… you can tell me. I’ll listen, I won’t judge."
