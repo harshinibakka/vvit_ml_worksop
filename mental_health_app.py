@@ -80,81 +80,70 @@ if st.button("Predict"):
             st.write("👉 Keep maintaining a healthy lifestyle 😊")
 
 # -----------------------------
-# 💬 HUMAN-LIKE CONTINUOUS CHATBOT
+# 💬 FINAL CHATBOT (NO ERRORS)
 # -----------------------------
 
-# Store chat history
+# Initialize memory
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 st.markdown("---")
 st.subheader("💬 Your Support Companion")
 
-# Input box with memory clearing
-user_input = st.text_input("Talk to me... I'm here for you 🤍", key="input_box")
-
 # -----------------------------
-# CHATBOT LOGIC (WITH MEMORY)
+# CHATBOT FUNCTION
 # -----------------------------
 def chatbot_reply(user_text):
     text = user_text.lower()
 
-    # 🔥 GET CONTEXT (last messages)
+    # Context memory
     history = st.session_state.chat_history[-6:]
     previous_msgs = [msg for speaker, msg in history if speaker == "You"]
     context = " ".join(previous_msgs).lower()
 
     combined = context + " " + text
 
-    # -----------------------------
-    # EMOTIONAL RESPONSES
-    # -----------------------------
-
-    # SAD / LOW
+    # Emotional responses
     if any(word in combined for word in ["sad", "lonely", "depressed", "cry", "not okay", "hurt"]):
-        return "Hey… 🤍 I can sense that something feels heavy for you right now. You don’t have to carry it alone… I’m here. Do you want to tell me what happened?"
+        return "Hey… 🤍 I can feel something is heavy on your heart. I’m here with you. Tell me what happened."
 
-    # STRESS
     elif any(word in combined for word in ["stress", "stressed", "pressure", "overwhelmed", "tired"]):
-        return "That sounds really overwhelming… 😔 like you’ve been carrying a lot on your own. I’m here with you—what’s been stressing you the most?"
+        return "That sounds really overwhelming… 😔 you’ve been handling a lot. What’s stressing you the most?"
 
-    # STUDIES (context aware)
-    elif any(word in combined for word in ["study", "studies", "exam", "college", "assignment"]):
-        return "Yeah… studies can feel really intense sometimes 📚 especially when everything piles up. Is it exams, workload, or something else that’s making it hard?"
+    elif any(word in combined for word in ["study", "exam", "college", "assignment"]):
+        return "Studies can feel really intense sometimes 📚 is it exams or workload that's bothering you?"
 
-    # ANXIETY
     elif any(word in combined for word in ["anxiety", "worried", "fear", "panic"]):
-        return "I understand… anxiety can feel really suffocating sometimes 🌿 Try taking a slow breath… you’re safe right now. Do you want to share what’s making you feel this way?"
+        return "I understand… anxiety can feel heavy 🌿 take a slow breath… you’re safe. Want to share more?"
 
-    # FEELING ALONE
-    elif any(word in combined for word in ["alone", "nobody", "no one"]):
-        return "Hey… you’re not alone 🤍 I’m right here with you. And what you’re feeling matters. Tell me what’s going on."
+    elif any(word in combined for word in ["alone", "no one", "nobody"]):
+        return "You’re not alone 🤍 I’m right here with you. Tell me what’s going on."
 
-    # HAPPY
-    elif any(word in combined for word in ["happy", "better", "good", "fine"]):
-        return "That’s really nice to hear 😊 I’m glad you’re feeling a bit better. What made your day feel like this?"
+    elif any(word in combined for word in ["happy", "good", "better"]):
+        return "That’s really nice to hear 😊 what made you feel that way?"
 
-    # DEFAULT (CONTINUATION STYLE)
     else:
-        return "I’m here with you 💙 take your time… tell me more about what you’re feeling."
+        return "I’m here for you 💙 tell me more…"
 
 # -----------------------------
-# SEND BUTTON LOGIC
+# INPUT + BUTTON (CORRECT WAY)
 # -----------------------------
+user_input = st.text_input("Talk to me... I'm here for you 🤍", key="input_box")
+
 if st.button("Send 💬"):
-    if st.session_state.input_box.strip() != "":
-
-        response = chatbot_reply(st.session_state.input_box)
+    if user_input.strip() != "":
+        
+        response = chatbot_reply(user_input)
 
         # Save chat
-        st.session_state.chat_history.append(("You", st.session_state.input_box))
+        st.session_state.chat_history.append(("You", user_input))
         st.session_state.chat_history.append(("Bot", response))
 
-        # ✅ CLEAR INPUT BOX AFTER SEND
+        # ✅ CLEAR INPUT (SAFE METHOD)
         st.session_state.input_box = ""
 
 # -----------------------------
-# DISPLAY CHAT (CONTINUOUS FLOW)
+# DISPLAY CHAT
 # -----------------------------
 for speaker, msg in st.session_state.chat_history:
     if speaker == "You":
