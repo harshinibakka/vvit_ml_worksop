@@ -48,14 +48,10 @@ if st.button("Predict"):
     proba = model.predict_proba(input_df)[0]
     st.write("Probability:", proba)
 
-    classes = model.classes_
     confidence = max(proba)
-
-    pred_class = classes[proba.argmax()]
     
-    confidence = max(proba)
     if confidence >= 0.6:
-        if pred_class == 1:
+        if probo[1] > probo[0]:
             st.error("🔴 High Risk of Mental Health Issues")
             st.write("👉 Suggestions:")
             st.write("- Improve work-life balance")
@@ -73,5 +69,5 @@ if st.button("Predict"):
         st.write("- Talk to someone you trust")
 
     else:
-        st.info("⚪ Uncertain Prediction (Model not confident)")
+        st.info("⚪ Uncertain Prediction")
    
