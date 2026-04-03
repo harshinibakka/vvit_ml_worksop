@@ -47,10 +47,15 @@ if st.button("Predict"):
     # ✅ IMPORTANT: SAME INDENT
     proba = model.predict_proba(input_df)[0]
     st.write("Probability:", proba)
+
+    classes = model.classes_
+    confidence = max(proba)
+
+    pred_class = classes[proba.argmax()]
     
     confidence = max(proba)
     if confidence >= 0.6:
-        if proba[0] > proba[1]:
+        if pred_class == 1:
             st.error("🔴 High Risk of Mental Health Issues")
             st.write("👉 Suggestions:")
             st.write("- Improve work-life balance")
