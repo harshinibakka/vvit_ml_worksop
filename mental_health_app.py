@@ -100,8 +100,8 @@ def chatbot_reply(user_text):
     # 🔥 GET CONTEXT FROM CHAT HISTORY
     history = st.session_state.chat_history[-6:]  # last 6 messages
 
-previous_msgs = [msg for speaker, msg in history if speaker == "You"]
-context = " ".join(previous_msgs).lower()
+    previous_msgs = [msg for speaker, msg in history if speaker == "You"]
+    context = " ".join(previous_msgs).lower()
 
     # Get previous context
     history = st.session_state.chat_history[-6:]
