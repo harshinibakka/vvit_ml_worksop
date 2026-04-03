@@ -80,8 +80,9 @@ if st.button("Predict"):
             st.write("👉 Keep maintaining a healthy lifestyle 😊")
 
 # -----------------------------
-# CHATBOT (OUTSIDE PREDICTION)
+# CHATBOT
 # -----------------------------
+
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
@@ -90,6 +91,9 @@ st.subheader("💬 Your Support Companion")
 
 user_input = st.text_input("Talk to me... I'm here for you 🤍")
 
+# -----------------------------
+# CHATBOT FUNCTION (ONLY LOGIC)
+# -----------------------------
 def chatbot_reply(user_text):
     text = user_text.lower()
 
@@ -98,43 +102,40 @@ def chatbot_reply(user_text):
     previous_msgs = [msg for speaker, msg in history if speaker == "You"]
     context = " ".join(previous_msgs).lower()
 
-    name = "Paapu"  # You can later make this dynamic
+    name = "Paapu"
 
-    # -----------------------------
-    # DEEP EMOTIONAL RESPONSES
-    # -----------------------------
+    if "not okay" in text or "sad" in text:
+        return f"{name}… 🤍 I can feel something is heavy… I'm here with you. Tell me what happened."
 
-    # SAD / LOW
-    if any(word in text for word in ["sad", "lonely", "depressed", "cry", "not okay"]):
-        return f"{name}… 🤍 I can feel that something is heavy in your heart… you don’t have to carry it alone. I’m right here with you. Tell me what’s been hurting you…"
+    elif "stress" in text:
+        return f"Hey {name}… 😔 that sounds really exhausting… what’s stressing you?"
 
-    # STRESS
-    elif any(word in text for word in ["stress", "stressed", "pressure", "tired", "overwhelmed"]):
-        return f"Hey {name}… 😔 that sounds really exhausting… like you’ve been holding too much inside. It’s okay to feel this way. I’m here… what’s been stressing you the most?"
+    elif "study" in text or "exam" in text:
+        return f"Ahh {name}… studies can be really overwhelming 😣 Are exams coming?"
 
-    # ANXIETY
-    elif any(word in text for word in ["anxiety", "worried", "fear", "panic"]):
-        return f"{name}… 🌿 I understand… that uneasy feeling can be really hard. Just breathe slowly… you’re safe right now. Tell me what’s making you feel this way…"
-
-    # CONTEXT CONTINUATION (MAGIC 💫)
     elif "stress" in context:
-        return f"I see {name}… so this is part of what’s been weighing on you… 😔 That must be really hard. Do you feel like it’s getting too much lately?"
+        return f"I see {name}… this is what's been stressing you 😔 tell me more…"
 
-    elif "sad" in context or "hurt" in context:
-        return f"That really sounds painful… 💔 I’m so sorry you're going through this. You don’t have to hide it here… I’m listening."
-
-    # STUDIES
-    elif any(word in text for word in ["study", "studies", "exam", "college"]):
-        return f"Ahh {name}… studies can feel really overwhelming sometimes 😣 especially when everything piles up. Are exams coming or is it just too much pressure?"
-
-    # ALONE FEELING
-    elif any(word in text for word in ["alone", "no one", "nobody"]):
-        return f"Hey… look at me {name} 🤍 you are not alone right now. I’m here with you… and I’m not going anywhere. You can talk to me…"
-
-    # HAPPY
-    elif any(word in text for word in ["happy", "good", "better"]):
-        return f"Aww {name} 😊 that makes me really happy to hear… tell me what made you feel this way?"
-
-    # DEFAULT
     else:
-        return f"I'm right here with you {name} 💙 whatever you're feeling… you can tell me. I’ll listen, I won’t judge."
+        return f"I'm here for you {name} 💙 tell me anything…"
+
+
+# -----------------------------
+# SEND BUTTON (OUTSIDE FUNCTION)
+# -----------------------------
+if st.button("Send 💬"):
+    if user_input.strip() != "":
+        response = chatbot_reply(user_input)
+
+        st.session_state.chat_history.append(("You", user_input))
+        st.session_state.chat_history.append(("Bot", response))
+
+
+# -----------------------------
+# DISPLAY CHAT
+# -----------------------------
+for speaker, msg in st.session_state.chat_history:
+    if speaker == "You":
+        st.write(f"🧍‍♀️ **You:** {msg}")
+    else:
+        st.write(f"🤖 **Companion:** {msg}")
