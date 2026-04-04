@@ -139,9 +139,7 @@ if st.button("Send 💬"):
         st.session_state.chat_history.append(("You", user_input))
         st.session_state.chat_history.append(("Bot", response))
 
-        # ✅ CLEAR INPUT (SAFE METHOD)
-        st.session_state.input_box = ""
-
+        
 # -----------------------------
 # DISPLAY CHAT
 # -----------------------------
