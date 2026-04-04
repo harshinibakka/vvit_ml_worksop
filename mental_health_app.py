@@ -80,15 +80,25 @@ if st.button("Predict"):
             st.write("👉 Keep maintaining a healthy lifestyle 😊")
 
 # -----------------------------
-# 💬 FINAL CHATBOT (NO ERRORS)
+# FINAL SMART CHATBOT
 # -----------------------------
 
 # Initialize memory
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
+if "user_state" not in st.session_state:
+    st.session_state.user_state = {
+        "topic": None,
+        "emotion": None,
+        "last_question": None
+    }
+
 st.markdown("---")
 st.subheader("💬 Your Support Companion")
+
+# INPUT BOX
+user_input = st.text_input("Talk to me... I'm here for you 🤍", key="input_box")
 
 # -----------------------------
 # CHATBOT FUNCTION
@@ -96,55 +106,72 @@ st.subheader("💬 Your Support Companion")
 def chatbot_reply(user_text):
     text = user_text.lower()
 
-    # Context memory
     history = st.session_state.chat_history[-6:]
-    previous_msgs = [msg for speaker, msg in history if speaker == "You"]
-    context = " ".join(previous_msgs).lower()
+    context = " ".join([msg for speaker, msg in history if speaker == "You"]).lower()
 
-    combined = context + " " + text
+    state = st.session_state.user_state
 
-    # Emotional responses
-    if any(word in combined for word in ["sad", "lonely", "depressed", "cry", "not okay", "hurt"]):
-        return "Hey… 🤍 I can feel something is heavy on your heart. I’m here with you. Tell me what happened."
+    # -----------------------------
+    # DETECT EMOTION
+    # -----------------------------
+    if any(word in text for word in ["stress", "stressed"]):
+        state["emotion"] = "stress"
 
-    elif any(word in combined for word in ["stress", "stressed", "pressure", "overwhelmed", "tired"]):
-        return "That sounds really overwhelming… 😔 you’ve been handling a lot. What’s stressing you the most?"
+    if any(word in text for word in ["exam", "study"]):
+        state["topic"] = "exam"
 
-    elif any(word in combined for word in ["study", "exam", "college", "assignment"]):
-        return "Studies can feel really intense sometimes 📚 is it exams or workload that's bothering you?"
+    if any(word in text for word in ["sad", "not okay"]):
+        state["emotion"] = "sad"
 
-    elif any(word in combined for word in ["anxiety", "worried", "fear", "panic"]):
-        return "I understand… anxiety can feel heavy 🌿 take a slow breath… you’re safe. Want to share more?"
+    # -----------------------------
+    # SMART FLOW
+    # -----------------------------
 
-    elif any(word in combined for word in ["alone", "no one", "nobody"]):
-        return "You’re not alone 🤍 I’m right here with you. Tell me what’s going on."
+    # STRESS FLOW
+    if state["emotion"] == "stress":
 
-    elif any(word in combined for word in ["happy", "good", "better"]):
-        return "That’s really nice to hear 😊 what made you feel that way?"
+        # FIRST QUESTION
+        if state["last_question"] is None:
+            state["last_question"] = "stress_reason"
+            return "That sounds really overwhelming… 😔 You're handling a lot. What’s stressing you the most?"
 
-    else:
-        return "I’m here for you 💙 tell me more…"
+        # USER ANSWERED
+        elif state["last_question"] == "stress_reason":
+
+            state["last_question"] = "support"
+
+            if state["topic"] == "exam":
+                return "Exams can feel really heavy… 📚 You're trying your best. Maybe break it into small parts and take short breaks. You're not alone in this 💙"
+
+            else:
+                return "I understand… that kind of pressure can build up. Try to pause for a moment, breathe slowly 🌿 I'm here with you."
+
+    # SAD FLOW
+    if state["emotion"] == "sad":
+        return "I'm really sorry you're feeling this way 🤍 I'm here with you. Do you want to share what happened?"
+
+    # DEFAULT
+    return "I'm here for you 💙 Tell me more."
 
 # -----------------------------
-# INPUT + BUTTON (CORRECT WAY)
+# SEND BUTTON
 # -----------------------------
-user_input = st.text_input("Talk to me... I'm here for you 🤍", key="input_box")
-
 if st.button("Send 💬"):
     if user_input.strip() != "":
-        
+
         response = chatbot_reply(user_input)
 
-        # Save chat
         st.session_state.chat_history.append(("You", user_input))
         st.session_state.chat_history.append(("Bot", response))
 
-        
+        # CLEAR INPUT BOX (IMPORTANT)
+        st.session_state.input_box = ""
+
 # -----------------------------
 # DISPLAY CHAT
 # -----------------------------
 for speaker, msg in st.session_state.chat_history:
     if speaker == "You":
-        st.write(f"🧍 **You:** {msg}")
+        st.write(f"🧍‍♀️ **You:** {msg}")
     else:
         st.write(f"🤖 **Companion:** {msg}")
