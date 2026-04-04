@@ -84,6 +84,11 @@ if st.button("Predict"):
 # -----------------------------
 
 # Initialize memory
+import streamlit as st
+from openai import OpenAI
+
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
@@ -104,67 +109,29 @@ user_input = st.text_input("Talk to me... I'm here for you 🤍", key="input_box
 # CHATBOT FUNCTION
 # -----------------------------
 def chatbot_reply(user_text):
-    text = user_text.lower()
+    # Convert chat history into AI format
+    messages = [
+        {"role": "system", "content": "You are a kind, supportive mental health companion. Speak gently and naturally like a human."}
+    ]
 
-    # Memory
-    history = st.session_state.chat_history[-6:]
-    context = " ".join([msg for speaker, msg in history if speaker == "You"]).lower()
-
-    state = st.session_state.user_state
-
-    # Detect emotion
-    if any(word in text for word in ["stress", "stressed"]):
-        state["emotion"] = "stress"
-
-    if any(word in text for word in ["exam", "study"]):
-        state["topic"] = "exam"
-
-    # -------------------------
-    # SMART CONVERSATION FLOW
-    # -------------------------
-
-    # First time stress
-    if state["emotion"] == "stress":
-
-        # Step 1: Ask cause
-        if "what's stressing you" not in context:
-            return "That sounds really overwhelming… 💛 You've been handling a lot. What’s stressing you the most?"
-
-        # Step 2: If exams
-        elif state["topic"] == "exam":
-
-            if "hardest" not in context:
-                return "Exams can feel really heavy… 📚 What part feels the hardest for you?"
-
-            else:
-                return "I understand… that pressure builds up 😔 You're trying your best. Have you been getting enough rest?"
-
-        # Step 3: general follow-up
+    # Add previous messages
+    for speaker, msg in st.session_state.chat_history:
+        if speaker == "You":
+            messages.append({"role": "user", "content": msg})
         else:
-            return "I'm here with you 💙 You don’t have to go through this alone. Tell me a bit more."
+            messages.append({"role": "assistant", "content": msg})
 
-    # Sad flow
-    elif any(word in text for word in ["sad", "not okay"]):
-        return "I'm really sorry you're feeling this way 💔 I'm here with you. Do you want to share what happened?"
+    # Add current user input
+    messages.append({"role": "user", "content": user_text})
 
-    # Greeting
-    elif any(word in text for word in ["hi", "hello", "hey"]):
-        return "Hey… I’m here for you 💙 How are you feeling today?"
+    # Call AI
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=messages,
+        temperature=0.7
+    )
 
-    # Default (SMART, not boring)
-    else:
-        return "I’m listening 💙 Tell me more… what’s been on your mind?"
-
-# -----------------------------
-# SEND BUTTON
-# -----------------------------
-if st.button("Send 💬"):
-    if user_input.strip() != "":
-        response = chatbot_reply(user_input)
-
-    st.session_state.chat_history.append(("You", user_input))
-    
-    st.session_state.chat_history.append(("Bot", response))
+    return response.choices[0].message.content
 
 # -----------------------------
 # DISPLAY CHAT
