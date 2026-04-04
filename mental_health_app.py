@@ -140,8 +140,6 @@ if st.button("Send 💬"):
         st.session_state.chat_history.append(("You", user_input))
         st.session_state.chat_history.append(("Companion", response))
         
-        st.session_state.input_box = ""
-
 # -----------------------------
 # DISPLAY CHAT
 # -----------------------------
