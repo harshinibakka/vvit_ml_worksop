@@ -7,3 +7,4 @@ seaborn
 altair<5
 standard-imghdr
 pyarrow
+openai
