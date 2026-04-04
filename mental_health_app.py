@@ -133,14 +133,14 @@ def chatbot_reply(user_text):
 
     return response.choices[0].message.content
     
-    if st.button("Send 💬"):
-        if user_input and user_input.strip() != "":
-            response = chatbot_reply(user_input)
+if st.button("Send 💬"):
+    if user_input and user_input.strip() != "":
+        response = chatbot_reply(user_input)
 
-            st.session_state.chat_history.append(("You", user_input))
-            st.session_state.chat_history.append(("Companion", response))
-
-            st.session_state.input_box = ""
+        st.session_state.chat_history.append(("You", user_input))
+        st.session_state.chat_history.append(("Companion", response))
+        
+        st.session_state.input_box = ""
 
 # -----------------------------
 # DISPLAY CHAT
