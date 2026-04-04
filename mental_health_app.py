@@ -145,6 +145,7 @@ if st.button("Send 💬"):
 # -----------------------------
 # DISPLAY CHAT
 # -----------------------------
+
 for speaker, msg in 
 st.session_state.chat_history:
     if speaker == "You":
