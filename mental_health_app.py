@@ -158,14 +158,11 @@ def chatbot_reply(user_text):
 # -----------------------------
 if st.button("Send 💬"):
     if user_input.strip() != "":
-
         response = chatbot_reply(user_input)
 
-        st.session_state.chat_history.append(("You", user_input))
-        st.session_state.chat_history.append(("Bot", response))
-
-        # CLEAR INPUT BOX (IMPORTANT)
-        st.session_state.input_box = ""
+    st.session_state.chat_history.append(("You", user_input))
+    
+    st.session_state.chat_history.append(("Bot", response))
 
 # -----------------------------
 # DISPLAY CHAT
