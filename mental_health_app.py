@@ -106,52 +106,54 @@ user_input = st.text_input("Talk to me... I'm here for you 🤍", key="input_box
 def chatbot_reply(user_text):
     text = user_text.lower()
 
+    # Memory
     history = st.session_state.chat_history[-6:]
     context = " ".join([msg for speaker, msg in history if speaker == "You"]).lower()
 
     state = st.session_state.user_state
 
-    # -----------------------------
-    # DETECT EMOTION
-    # -----------------------------
+    # Detect emotion
     if any(word in text for word in ["stress", "stressed"]):
         state["emotion"] = "stress"
 
     if any(word in text for word in ["exam", "study"]):
         state["topic"] = "exam"
 
-    if any(word in text for word in ["sad", "not okay"]):
-        state["emotion"] = "sad"
+    # -------------------------
+    # SMART CONVERSATION FLOW
+    # -------------------------
 
-    # -----------------------------
-    # SMART FLOW
-    # -----------------------------
-
-    # STRESS FLOW
+    # First time stress
     if state["emotion"] == "stress":
 
-        # FIRST QUESTION
-        if state["last_question"] is None:
-            state["last_question"] = "stress_reason"
-            return "That sounds really overwhelming… 😔 You're handling a lot. What’s stressing you the most?"
+        # Step 1: Ask cause
+        if "what's stressing you" not in context:
+            return "That sounds really overwhelming… 💛 You've been handling a lot. What’s stressing you the most?"
 
-        # USER ANSWERED
-        elif state["last_question"] == "stress_reason":
+        # Step 2: If exams
+        elif state["topic"] == "exam":
 
-            state["last_question"] = "support"
-
-            if state["topic"] == "exam":
-                return "Exams can feel really heavy… 📚 You're trying your best. Maybe break it into small parts and take short breaks. You're not alone in this 💙"
+            if "hardest" not in context:
+                return "Exams can feel really heavy… 📚 What part feels the hardest for you?"
 
             else:
-                return "I understand… that kind of pressure can build up. Try to pause for a moment, breathe slowly 🌿 I'm here with you."
+                return "I understand… that pressure builds up 😔 You're trying your best. Have you been getting enough rest?"
 
-    # SAD FLOW
-    if state["emotion"] == "sad":
-        return "I'm really sorry you're feeling this way 🤍 I'm here with you. Do you want to share what happened?"
+        # Step 3: general follow-up
+        else:
+            return "I'm here with you 💙 You don’t have to go through this alone. Tell me a bit more."
 
-    # DEFAULT
-    return "I'm here for you 💙 Tell me more."
+    # Sad flow
+    elif any(word in text for word in ["sad", "not okay"]):
+        return "I'm really sorry you're feeling this way 💔 I'm here with you. Do you want to share what happened?"
+
+    # Greeting
+    elif any(word in text for word in ["hi", "hello", "hey"]):
+        return "Hey… I’m here for you 💙 How are you feeling today?"
+
+    # Default (SMART, not boring)
+    else:
+        return "I’m listening 💙 Tell me more… what’s been on your mind?"
 
 # -----------------------------
 # SEND BUTTON
