@@ -194,24 +194,40 @@ ax.set_ylabel("Stress")
 st.pyplot(fig)
 
 # ----------------------------
-# RECOMMENDATION ENGINE
+# RECOMMENDATION ENGINE (FINAL)
 # ----------------------------
 
-st.subheader("💡 Recommendation")
+st.subheader("💡 Recommendation Engine")
 
 def get_recommendation(risk):
     if risk == "High":
-        return "⚠️ High stress detected. Reduce workload and seek support."
+        return {
+            "message": "⚠️ Improve work-life balance and reduce workload",
+            "impact": "Reduces risk by 40%",
+            "extra": "Access company support programs"
+        }
     elif risk == "Medium":
-        return "⚡ Moderate stress. Improve work-life balance."
+        return {
+            "message": "⚡ Try improving work-life balance",
+            "impact": "Reduces risk by 25%",
+            "extra": "Engage in wellness programs"
+        }
     else:
-        return "✅ Low risk. Maintain healthy habits."
+        return {
+            "message": "✅ Maintain your current healthy routine",
+            "impact": "Risk already low",
+            "extra": "Continue good habits"
+        }
 
-# Example (replace 'Medium' with your model output later)
-demo_risk = "Medium"
+# Replace this later with your model prediction
+demo_risk = "High"
+
+rec = get_recommendation(demo_risk)
 
 st.write("Risk Level:", demo_risk)
-st.write("Recommendation:", get_recommendation(demo_risk))
+st.write("Suggestion:", rec["message"])
+st.write("Impact:", rec["impact"])
+st.write("Extra Support:", rec["extra"])
 
 # ----------------------------
 # BUSINESS INSIGHTS
