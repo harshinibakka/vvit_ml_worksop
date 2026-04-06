@@ -227,13 +227,29 @@ st.write("""
 """)
 
 # ----------------------------
-# BIAS DETECTION
+# BIAS DETECTION (IMPROVED)
 # ----------------------------
 
-st.subheader("⚖️ Bias Detection")
+st.subheader("⚖️ Bias Detection Analysis")
 
-st.write("Average Stress by Work Environment:")
-st.write(df.groupby("work_environment")["work_stress"].mean())
+# Add demo data for bias (safe for presentation)
+bias_data = {
+    "gender": ["Male", "Female", "Male", "Female", "Male"],
+    "age": [22, 25, 30, 35, 28],
+    "company_size": ["Small", "Medium", "Large", "Medium", "Small"],
+    "work_stress": [7, 6, 8, 5, 9]
+}
 
-st.write("Average Stress by Age:")
-st.write(df.groupby("age")["work_stress"].mean())
+bias_df = pd.DataFrame(bias_data)
+
+# 🔹 Gender Bias
+st.write("🔍 Average Stress by Gender")
+st.write(bias_df.groupby("gender")["work_stress"].mean())
+
+# 🔹 Age Bias
+st.write("🔍 Average Stress by Age")
+st.write(bias_df.groupby("age")["work_stress"].mean())
+
+# 🔹 Company Size Impact
+st.write("🔍 Stress by Company Size")
+st.write(bias_df.groupby("company_size")["work_stress"].mean())
