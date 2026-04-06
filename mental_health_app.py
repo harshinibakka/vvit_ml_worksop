@@ -149,3 +149,91 @@ for speaker, msg in st.session_state.chat_history:
         st.write(f"🧍‍♀️ **You:** {msg}")
     else:
         st.write(f"🤖 **Companion:** {msg}")
+
+# ----------------------------
+# VISUALIZATION DASHBOARD
+# ----------------------------
+
+st.subheader("📊 Visualization Dashboard")
+
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# Use dummy data (safe for demo)
+data = {
+    "age": [22, 25, 30, 35, 28],
+    "work_stress": [7, 6, 8, 5, 9],
+    "company_support": [3, 4, 2, 5, 3],
+    "work_environment": [1, 2, 1, 2, 1]  # 1=Remote, 2=Office
+}
+
+df = pd.DataFrame(data)
+
+# Graph 1: Stress vs Company Support
+st.write("Stress vs Company Support")
+fig, ax = plt.subplots()
+ax.scatter(df["work_stress"], df["company_support"])
+ax.set_xlabel("Work Stress")
+ax.set_ylabel("Company Support")
+st.pyplot(fig)
+
+# Graph 2: Age vs Stress
+st.write("Age vs Stress")
+fig, ax = plt.subplots()
+ax.scatter(df["age"], df["work_stress"])
+ax.set_xlabel("Age")
+ax.set_ylabel("Stress")
+st.pyplot(fig)
+
+# Graph 3: Work Environment vs Stress
+st.write("Work Environment vs Stress")
+fig, ax = plt.subplots()
+ax.scatter(df["work_environment"], df["work_stress"])
+ax.set_xlabel("Work Environment (1=Remote, 2=Office)")
+ax.set_ylabel("Stress")
+st.pyplot(fig)
+
+# ----------------------------
+# RECOMMENDATION ENGINE
+# ----------------------------
+
+st.subheader("💡 Recommendation")
+
+def get_recommendation(risk):
+    if risk == "High":
+        return "⚠️ High stress detected. Reduce workload and seek support."
+    elif risk == "Medium":
+        return "⚡ Moderate stress. Improve work-life balance."
+    else:
+        return "✅ Low risk. Maintain healthy habits."
+
+# Example (replace 'Medium' with your model output later)
+demo_risk = "Medium"
+
+st.write("Risk Level:", demo_risk)
+st.write("Recommendation:", get_recommendation(demo_risk))
+
+# ----------------------------
+# BUSINESS INSIGHTS
+# ----------------------------
+
+st.subheader("📈 Business Insights")
+
+st.write("""
+- High work stress strongly increases mental health risk
+- Low company support leads to burnout
+- Remote work can increase isolation risk
+- Younger employees show higher stress variation
+""")
+
+# ----------------------------
+# BIAS DETECTION
+# ----------------------------
+
+st.subheader("⚖️ Bias Detection")
+
+st.write("Average Stress by Work Environment:")
+st.write(df.groupby("work_environment")["work_stress"].mean())
+
+st.write("Average Stress by Age:")
+st.write(df.groupby("age")["work_stress"].mean())
