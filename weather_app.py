@@ -58,3 +58,51 @@ if st.button("Predict Weather"):
 
     st.subheader("🌤️ Weather Category")
     st.warning(category)
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+st.markdown("---")
+st.header("📊 Data Visualization")
+
+# Load dataset
+df = pd.read_csv("weatherHistory.csv")
+
+# Convert date
+df['Formatted Date'] = pd.to_datetime(df['Formatted Date'])
+
+# Temperature Trends
+st.subheader("🌡️ Temperature Trends Over Time")
+
+temp_trend = df.groupby(df['Formatted Date'].dt.date)['Temperature (C)'].mean()
+
+fig1, ax1 = plt.subplots()
+ax1.plot(temp_trend.index[:100], temp_trend.values[:100])
+ax1.set_xlabel("Date")
+ax1.set_ylabel("Temperature (C)")
+
+st.pyplot(fig1)
+
+# Extract month
+df['month'] = df['Formatted Date'].dt.month
+
+st.subheader("🌸 Seasonal Temperature Patterns")
+
+season_temp = df.groupby('month')['Temperature (C)'].mean()
+
+fig2, ax2 = plt.subplots()
+ax2.plot(season_temp.index, season_temp.values)
+ax2.set_xlabel("Month")
+ax2.set_ylabel("Avg Temperature (C)")
+
+st.pyplot(fig2)
+
+st.subheader("🌧️ Rainfall Distribution")
+
+rain_counts = df['Precip Type'].value_counts()
+
+fig3, ax3 = plt.subplots()
+ax3.pie(rain_counts, labels=rain_counts.index, autopct='%1.1f%%')
+
+st.pyplot(fig3)
+
