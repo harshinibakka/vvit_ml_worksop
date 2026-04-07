@@ -3,7 +3,7 @@ import joblib
 import numpy as np
 from datetime import date
 
-# Load models
+# Load weather_models
 weather_model = joblib.load("weather_model.pkl")
 rain_model = joblib.load("rain_model.pkl")
 
