@@ -69,7 +69,8 @@ st.header("📊 Data Visualization")
 df = pd.read_csv("weatherHistory.csv")
 
 # Convert date
-df['Formatted Date'] = pd.to_datetime(df['Formatted Date'])
+df['Formatted Date'] = pd.to_datetime(df['Formatted Date'], utc=True, errors='coerce')
+df = df.dropna(subset=['Formatted Date'])
 
 # Temperature Trends
 st.subheader("🌡️ Temperature Trends Over Time")
