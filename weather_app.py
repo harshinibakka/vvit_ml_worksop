@@ -107,3 +107,43 @@ ax3.pie(rain_counts, labels=rain_counts.index, autopct='%1.1f%%')
 
 st.pyplot(fig3)
 
+st.subheader("📅 7-Day Forecast")
+
+future_days = 7
+future_data = []
+
+for i in range(future_days):
+    temp_pred = model.predict([[humidity, wind_speed]])[0]
+    rain_prob = clf.predict_proba([[humidity, wind_speed, 1]])[0][1]
+
+    future_data.append({
+        "Day": f"Day {i+1}",
+        "Temperature (°C)": round(temp_pred, 2),
+        "Rain Probability (%)": round(rain_prob * 100, 2)
+    })
+
+future_df = pd.DataFrame(future_data)
+st.dataframe(future_df)
+
+st.subheader("⚠️ Extreme Weather Detection")
+
+if temp_pred > 35:
+    st.error("🔥 Heatwave Warning!")
+
+elif rain_prob > 0.7:
+    st.warning("🌧️ Heavy Rain Expected!")
+
+elif wind_speed > 40:
+    st.warning("🌪️ Storm Alert!")
+
+else:
+    st.success("✅ Weather conditions are normal")
+
+st.subheader("🌍 Climate Trend Analysis")
+
+df['year'] = df['Formatted Date'].dt.year
+
+yearly_temp = df.groupby('year')['Temperature (C)'].mean()
+
+st.line_chart(yearly_temp)
+
