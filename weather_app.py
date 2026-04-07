@@ -109,13 +109,18 @@ st.pyplot(fig3)
 
 if st.button("Predict Weather"):
 
+    # Predictions
     temp_pred = weather_model.predict([[humidity, wind_speed]])[0]
     rain_prob = rain_model.predict_proba([[humidity, wind_speed, 1]])[0][1]
 
-    # 🔥 OUTPUT
-    st.write(temp_pred)
+    # OUTPUT
+    st.subheader("🌡️ Predicted Temperature")
+    st.success(f"{temp_pred:.2f} °C")
 
-    # 🔥 7-DAY FORECAST
+    st.subheader("🌧️ Rain Probability")
+    st.info(f"{rain_prob*100:.2f}% chance of rain")
+
+    # 7-DAY FORECAST
     st.subheader("📅 7-Day Forecast")
 
     future_data = []
@@ -128,25 +133,14 @@ if st.button("Predict Weather"):
 
     st.dataframe(pd.DataFrame(future_data))
 
-st.subheader("⚠️ Extreme Weather Detection")
+    # EXTREME WEATHER
+    st.subheader("⚠️ Extreme Weather Detection")
 
-if temp_pred > 35:
-    st.error("🔥 Heatwave Warning!")
-
-elif rain_prob > 0.7:
-    st.warning("🌧️ Heavy Rain Expected!")
-
-elif wind_speed > 40:
-    st.warning("🌪️ Storm Alert!")
-
-else:
-    st.success("✅ Weather conditions are normal")
-
-st.subheader("🌍 Climate Trend Analysis")
-
-df['year'] = df['Formatted Date'].dt.year
-
-yearly_temp = df.groupby('year')['Temperature (C)'].mean()
-
-st.line_chart(yearly_temp)
-
+    if temp_pred > 35:
+        st.error("🔥 Heatwave Warning!")
+    elif rain_prob > 0.7:
+        st.warning("🌧️ Heavy Rain Expected!")
+    elif wind_speed > 40:
+        st.warning("🌪️ Storm Alert!")
+    else:
+        st.success("✅ Weather conditions are normal")
