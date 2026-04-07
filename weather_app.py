@@ -1,6 +1,7 @@
 import streamlit as st
 import joblib
 import numpy as np
+from datetime import date
 
 # Load models
 weather_model = joblib.load("weather_model.pkl")
@@ -10,44 +11,50 @@ st.set_page_config(page_title="Weather Prediction", layout="centered")
 
 # Title
 st.title("🌦️ Weather Prediction App")
-st.write("Predict Temperature and Rain Probability")
+st.write("Enter details to predict weather conditions")
 
 st.markdown("---")
 
-# Inputs
-humidity = st.slider("Humidity (%)", 0, 100, 50)
-wind_speed = st.slider("Wind Speed (km/h)", 0, 50, 10)
+# INPUTS
+location = st.text_input("📍 Enter Location", "Bangalore")
 
-# Summary input (must match training encoding)
-summary_options = [
-    "Clear", "Partly Cloudy", "Mostly Cloudy", "Overcast",
-    "Rain", "Foggy", "Windy"
-]
+selected_date = st.date_input("📅 Select Date", date.today())
 
-summary = st.selectbox("Weather Summary", summary_options)
-
-# Simple encoding (same order as training ideally)
-summary_mapping = {label: idx for idx, label in enumerate(summary_options)}
-summary_encoded = summary_mapping[summary]
+humidity = st.slider("💧 Humidity (%)", 0, 100, 50)
+wind_speed = st.slider("🌬️ Wind Speed (km/h)", 0, 50, 10)
 
 st.markdown("---")
 
-# Prediction button
-if st.button("Predict"):
+# PREDICT BUTTON
+if st.button("Predict Weather"):
 
-    # Temperature prediction
+    # Prepare inputs
     temp_input = np.array([[humidity, wind_speed]])
-    temperature = weather_model.predict(temp_input)[0]
+    rain_input = np.array([[humidity, wind_speed, 1]])  # simple placeholder encoding
 
-    # Rain prediction
-    rain_input = np.array([[humidity, wind_speed, summary_encoded]])
+    # Predictions
+    temperature = weather_model.predict(temp_input)[0]
     rain_pred = rain_model.predict(rain_input)[0]
 
-    st.subheader("🌡️ Predicted Temperature:")
+    # Convert rain to probability (approx)
+    rain_prob = rain_model.predict_proba(rain_input)[0][1]
+
+    # Weather category logic (simple rule-based)
+    if rain_pred == 1:
+        category = "Rainy ☔"
+    elif humidity > 70:
+        category = "Cloudy ☁️"
+    elif temperature > 30:
+        category = "Sunny ☀️"
+    else:
+        category = "Moderate 🌤️"
+
+    # OUTPUTS
+    st.subheader("🌡️ Predicted Temperature")
     st.success(f"{temperature:.2f} °C")
 
-    st.subheader("🌧️ Rain Prediction:")
-    if rain_pred == 1:
-        st.error("Rain Expected ☔")
-    else:
-        st.success("No Rain 🌤️")
+    st.subheader("🌧️ Rain Probability")
+    st.info(f"{rain_prob*100:.2f}% chance of rain")
+
+    st.subheader("🌤️ Weather Category")
+    st.warning(category)
