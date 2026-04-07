@@ -109,8 +109,8 @@ st.pyplot(fig3)
 
 if st.button("Predict Weather"):
 
-    temp_pred = model.predict([[humidity, wind_speed]])[0]
-    rain_prob = clf.predict_proba([[humidity, wind_speed, 1]])[0][1]
+    temp_pred = weather_model.predict([[humidity, wind_speed]])[0]
+    rain_prob = clf.rain_model.predict_proba([[humidity, wind_speed, 1]])[0][1]
 
     # 🔥 OUTPUT
     st.write(temp_pred)
