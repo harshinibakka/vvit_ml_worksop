@@ -91,7 +91,8 @@ st.markdown("""
 .chat-container {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+    padding: 1opx;
 }
 
 .user-bubble {
@@ -124,12 +125,6 @@ st.markdown("""
     margin-left: 5px;
 }
 
-.chat-container {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 10px;
-}
 </style>
 """, unsafe_allow_html=True)
 
