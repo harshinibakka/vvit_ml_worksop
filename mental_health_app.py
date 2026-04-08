@@ -197,12 +197,17 @@ def chatbot_reply(user_text):
     st.session_state.memory["last_question"] = "talk_more"
     return "I’m here for you 💙 Tell me more about what you’re feeling."
 
-if st.button("send"):
+if st.button("Send 💬"):
     if user_input and user_input.strip() != "":
-        response = chatbot_reply(user_input)
         
-        st.session_state.chat_history.append(("you", user_input))
-        st.session_state.chat_history.append(("companion", response))
+        # Add user message FIRST
+        st.session_state.chat_history.append(("You", user_input))
+
+        # Generate bot reply
+        response = chatbot_reply(user_input)
+
+        # Add bot reply
+        st.session_state.chat_history.append(("Companion", response))
         
 # -----------------------------
 # DISPLAY CHAT
