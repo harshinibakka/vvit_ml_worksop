@@ -109,29 +109,30 @@ user_input = st.text_input("Talk to me... I'm here for you 🤍", key="input_box
 # CHATBOT FUNCTION
 # -----------------------------
 def chatbot_reply(user_text):
-    # Convert chat history into AI format
-    messages = [
-        {"role": "system", "content": "You are a kind, supportive mental health companion. Speak gently and naturally like a human."}
-    ]
+    text = user_text.lower()
 
-    # Add previous messages
-    for speaker, msg in st.session_state.chat_history:
-        if speaker == "You":
-            messages.append({"role": "user", "content": msg})
-        else:
-            messages.append({"role": "assistant", "content": msg})
+    # Simple emotion detection
+    if any(word in text for word in ["sad", "depressed", "cry", "upset"]):
+        return "I'm really sorry you're feeling this way 💙 You don't have to go through this alone."
 
-    # Add current user input
-    messages.append({"role": "user", "content": user_text})
+    elif any(word in text for word in ["stress", "pressure", "tired", "exhausted"]):
+        return "You’ve been carrying a lot 😔 Take a small break… even 5 minutes can help."
 
-    # Call AI
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=messages,
-        temperature=0.7
-    )
+    elif any(word in text for word in ["anxious", "anxiety", "fear", "worried"]):
+        return "Let’s slow things down 🌿 Try this: inhale… hold… exhale slowly. You’re safe."
 
-    return response.choices[0].message.content
+    elif any(word in text for word in ["lonely", "alone"]):
+        return "Hey… I’m right here with you 🤍 You’re not alone right now."
+
+    elif any(word in text for word in ["happy", "good", "fine"]):
+        return "That’s nice to hear 😊 Keep holding onto that feeling."
+
+    elif any(word in text for word in ["hi", "hello", "hey"]):
+        return "Hi Paapu 💙 Tell me what’s on your mind."
+
+    else:
+        return "I’m here to listen 💙 Can you tell me a little more?"
+   
     
 if st.button("Send 💬"):
     if user_input and user_input.strip() != "":
