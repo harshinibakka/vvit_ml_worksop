@@ -225,7 +225,41 @@ def chatbot_reply(user_text):
             "It’s okay to take your time… you’re not alone 💙"
         ])
 
-   
+    # -------------------------------
+    # WORKPLACE MENTAL HEALTH LOGIC
+    # ------------------------------
+    
+    if "work pressure" in text or "deadline" in text or "workload" in text:
+        st.session_state.memory["last_question"] = "talk_more"
+        return "Work pressure can build up quickly… how has it been affecting you lately?"
+    
+    if "office politics" in text or "colleagues" in text or "team" in text:
+        st.session_state.memory["last_question"] = "talk_more"
+        return "Workplace dynamics can be really challenging… do you feel supported in your environment?"
+    
+    if "burnout" in text or "exhausted" in text:
+        st.session_state.memory["last_question"] = "talk_more"
+        return "Feeling burnt out can be really draining… have you been able to take any time for yourself?"
+    
+    if "no support" in text or "not supported" in text:
+        st.session_state.memory["last_question"] = "talk_more"
+        return "Lack of support at work can feel isolating… would you like to talk about what’s been happening?"
+    
+    if "remote work" in text or "work from home" in text:
+        st.session_state.memory["last_question"] = "talk_more"
+        return "Remote work can sometimes feel isolating or blur boundaries… how has your experience been?"
+    
+    if "work life balance" in text or "balance" in text:
+        st.session_state.memory["last_question"] = "talk_more"
+        return "Maintaining work-life balance can be tough… do you feel like work is taking over your personal time?"
+    
+    if "job" in text and "stress" in text:
+        st.session_state.memory["last_question"] = "talk_more"
+        return "Job-related stress can impact both mental and emotional well-being… what part of your work feels most stressful?"
+    
+    if "career" in text and "confused" in text:
+        st.session_state.memory["last_question"] = "talk_more"
+        return "Career uncertainty can feel overwhelming… what concerns you the most right now?"
     # DETECT TOPIC
 
     if "future" in text:
