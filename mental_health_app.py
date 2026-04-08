@@ -197,11 +197,11 @@ def chatbot_reply(user_text):
     last_question = st.session_state.memory["last_question"]
 
     if last_question == "comfort" and text not in ["no", "not really"]:
-    return random.choice([
-        "I'm really glad you shared that 💙 What’s been on your mind?",
-        "Thank you for opening up… I’m here for you 💙",
-        "Take your time… tell me what you’re feeling 💙"
-    ])
+        return random.choice([
+            "I'm really glad you shared that 💙 What’s been on your mind?",
+            "Thank you for opening up… I’m here for you 💙",
+            "Take your time… tell me what you’re feeling 💙"
+        ])
 
     if text in ["yes", "yeah", "ok", "okay"]:
     if last_question == "talk_more":
