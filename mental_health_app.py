@@ -85,18 +85,17 @@ if st.button("Predict"):
 
 # Initialize memory
 import streamlit as st
-from openai import OpenAI
-
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 if "user_state" not in st.session_state:
-    st.session_state.user_state = {
-        "topic": None,
+    
+    if "memory" not in st.session_state:
+        st.session_state.memory = {
         "emotion": None,
-        "last_question": None
+        "topic": None,
+        "last_user_input": ""
     }
 
 st.markdown("---")
@@ -105,42 +104,69 @@ st.subheader("💬 Your Support Companion")
 # INPUT BOX
 user_input = st.text_input("Talk to me... I'm here for you 🤍", key="input_box")
 
+def detect_emotion(text):
+    text = text.lower()
+
+    if any(w in text for w in ["stress", "pressure", "overwhelmed"]):
+        return "stress"
+    elif any(w in text for w in ["sad", "cry", "lonely", "alone"]):
+        return "sad"
+    elif any(w in text for w in ["anxious", "worried", "fear"]):
+        return "anxiety"
+    elif any(w in text for w in ["happy", "good", "better"]):
+        return "positive"
+
+    return None
+    
 # -----------------------------
 # CHATBOT FUNCTION
 # -----------------------------
+import random
+
 def chatbot_reply(user_text):
+    emotion = detect_emotion(user_text)
+
+    # store emotion
+    if emotion:
+        st.session_state.memory["emotion"] = emotion
+
+    last_emotion = st.session_state.memory["emotion"]
+
+    responses = {
+        "stress": [
+            "That sounds really overwhelming 😔 What’s been stressing you the most?",
+            "You’ve been handling so much… I’m really proud of you 💙",
+            "Let’s slow down together 🌿 Want to talk about it?"
+        ],
+        "sad": [
+            "I’m really sorry you’re feeling this way 💔",
+            "You don’t have to go through this alone… I’m here 🤍",
+            "Do you want to share what’s making you feel like this?"
+        ],
+        "anxiety": [
+            "Take a slow breath with me 🌿 You’re safe here.",
+            "It’s okay to feel this way… let’s go step by step 🤍",
+            "What’s worrying you right now?"
+        ],
+        "positive": [
+            "That’s really nice to hear 😊💙",
+            "I’m glad you’re feeling better 🌸",
+            "That made me smile too!"
+        ]
+    }
+
+    if last_emotion in responses:
+        return random.choice(responses[last_emotion])
+
     text = user_text.lower()
 
-    # Simple emotion detection
-    if any(word in text for word in ["sad", "depressed", "cry", "upset"]):
-        return "I'm really sorry you're feeling this way 💙 You don't have to go through this alone."
+    if "future" in text:
+        return "Thinking about the future can feel scary sometimes… what part worries you the most?"
 
-    elif any(word in text for word in ["stress", "pressure", "tired", "exhausted"]):
-        return "You’ve been carrying a lot 😔 Take a small break… even 5 minutes can help."
+    if "thank" in text:
+        return "You don’t have to thank me… I’m here for you always 💙"
 
-    elif any(word in text for word in ["anxious", "anxiety", "fear", "worried"]):
-        return "Let’s slow things down 🌿 Try this: inhale… hold… exhale slowly. You’re safe."
-
-    elif any(word in text for word in ["lonely", "alone"]):
-        return "Hey… I’m right here with you 🤍 You’re not alone right now."
-
-    elif any(word in text for word in ["happy", "good", "fine"]):
-        return "That’s nice to hear 😊 Keep holding onto that feeling."
-
-    elif any(word in text for word in ["hi", "hello", "hey"]):
-        return "Hi Paapu 💙 Tell me what’s on your mind."
-
-    else:
-        return "I’m here to listen 💙 Can you tell me a little more?"
-   
-    
-if st.button("Send 💬"):
-    if user_input and user_input.strip() != "":
-        response = chatbot_reply(user_input)
-
-        st.session_state.chat_history.append(("You", user_input))
-        st.session_state.chat_history.append(("Companion", response))
-        
+    return "I’m here for you 💙 Tell me more about what you’re feeling."
 # -----------------------------
 # DISPLAY CHAT
 # -----------------------------
