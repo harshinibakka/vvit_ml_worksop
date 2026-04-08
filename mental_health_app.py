@@ -100,9 +100,13 @@ st.markdown("""
     color: white;
     padding: 10px 15px;
     border-radius: 15px;
+
+    display: inline-block;   /* ⭐ IMPORTANT */
+    width: fit-content;      /* ⭐ IMPORTANT */
     max-width: 60%;
+
     margin-left: auto;
-    marhin-right: 5px;
+    margin-right: 5px;
 }
 
 .bot-bubble {
@@ -111,7 +115,11 @@ st.markdown("""
     color: white;
     padding: 10px 15px;
     border-radius: 15px;
+
+    display: inline-block;   /* ⭐ IMPORTANT */
+    width: fit-content;      /* ⭐ IMPORTANT */
     max-width: 60%;
+
     margin-right: auto;
     margin-left: 5px;
 }
