@@ -107,6 +107,11 @@ ax3.pie(rain_counts, labels=rain_counts.index, autopct='%1.1f%%')
 
 st.pyplot(fig3)
 
+    if st.button("Predict Weather"):
+
+    temp_pred = weather_model.predict([[humidity, wind_speed]])[0]
+    rain_prob = rain_model.predict_proba([[humidity, wind_speed, 1]])[0][1]
+
     # OUTPUT
     st.subheader("🌡️ Predicted Temperature")
     st.success(f"{temp_pred:.2f} °C")
