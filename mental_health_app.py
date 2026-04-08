@@ -167,6 +167,14 @@ def chatbot_reply(user_text):
         return "You don’t have to thank me… I’m here for you always 💙"
 
     return "I’m here for you 💙 Tell me more about what you’re feeling."
+
+if st.button("send"):
+    if user_input and user_input.strip() != "":
+        response = chatbot_reply(user_input)
+        
+        st.session_state.chat_history.append(("you", user_input))
+        st.session_state.chat_history.append(("companion", response))
+        
 # -----------------------------
 # DISPLAY CHAT
 # -----------------------------
