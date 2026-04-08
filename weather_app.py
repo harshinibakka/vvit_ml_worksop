@@ -59,6 +59,34 @@ if st.button("Predict Weather"):
     st.subheader("🌤️ Weather Category")
     st.warning(category)
 
+     # 7-DAY FORECAST
+    st.subheader("📅 7-Day Forecast")
+
+    future_data = []
+    for i in range(7):
+        future_data.append({
+            "Day": f"Day {i+1}",
+            "Temperature": round(temperature, 2),
+            "Rain %": round(rain_prob * 100, 2)
+        })
+
+    st.dataframe(pd.DataFrame(future_data))
+
+    # 🔥 EXTREME WEATHER (IMPORTANT: INSIDE BUTTON)
+    st.subheader("⚠️ Extreme Weather Detection")
+
+    if temperature > 35:
+        st.error("🔥 Heatwave Warning!")
+
+    elif rain_prob > 0.7:
+        st.warning("🌧️ Heavy Rain Expected!")
+
+    elif wind_speed > 40:
+        st.warning("🌪️ Storm Alert!")
+
+    else:
+        st.success("✅ Weather conditions are normal")
+
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -106,31 +134,3 @@ fig3, ax3 = plt.subplots()
 ax3.pie(rain_counts, labels=rain_counts.index, autopct='%1.1f%%')
 
 st.pyplot(fig3)
-
-    # 7-DAY FORECAST
-    st.subheader("📅 7-Day Forecast")
-
-    future_data = []
-    for i in range(7):
-        future_data.append({
-            "Day": f"Day {i+1}",
-            "Temperature": round(temperature, 2),
-            "Rain %": round(rain_prob * 100, 2)
-        })
-
-    st.dataframe(pd.DataFrame(future_data))
-
-    # 🔥 EXTREME WEATHER (IMPORTANT: INSIDE BUTTON)
-    st.subheader("⚠️ Extreme Weather Detection")
-
-    if temperature > 35:
-        st.error("🔥 Heatwave Warning!")
-
-    elif rain_prob > 0.7:
-        st.warning("🌧️ Heavy Rain Expected!")
-
-    elif wind_speed > 40:
-        st.warning("🌪️ Storm Alert!")
-
-    else:
-        st.success("✅ Weather conditions are normal")
