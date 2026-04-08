@@ -149,7 +149,19 @@ st.subheader("💬 Your Support Companion")
 
 if st.button("🧹 Clear Chat"):
     st.session_state.chat_history = []
-    st.session_state.show_chart = True   # reset chart also
+    
+     # RESET MEMORY (THIS IS MISSING)
+    st.session_state.memory = {
+        "topic": None,
+        "emotion": None,
+        "last_question": None
+    }
+    
+    # Reset chart
+    st.session_state.show_chart = True
+
+    # FORCE REFRESH (THIS IS KEY 🔥)
+    st.rerun()
 
 # INPUT BOX
 user_input = st.text_input("", placeholder="Message your companion...", key="input_box")
