@@ -100,7 +100,9 @@ st.markdown("""
     color: white;
     padding: 10px 15px;
     border-radius: 15px;
-    max-width: 70%;
+    max-width: 60%;
+    margin-left: auto;
+    marhin-right: 5px;
 }
 
 .bot-bubble {
@@ -109,7 +111,16 @@ st.markdown("""
     color: white;
     padding: 10px 15px;
     border-radius: 15px;
-    max-width: 70%;
+    max-width: 60%;
+    margin-right: auto;
+    margin-left: 5px;
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px;
 }
 </style>
 """, unsafe_allow_html=True)
