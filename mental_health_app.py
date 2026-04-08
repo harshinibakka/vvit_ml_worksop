@@ -96,18 +96,19 @@ st.markdown("""
 }
 
 .user-bubble {
-    align-self: flex-end;
+    display: inline-block;
+    width: fit-content;
+    max-width: 60%;
+
     background-color: #2b313e;
     color: white;
     padding: 10px 15px;
     border-radius: 15px;
 
-    display: inline-block;   /* ⭐ IMPORTANT */
-    width: fit-content;      /* ⭐ IMPORTANT */
-    max-width: 60%;
+    margin-left: auto;   /* ⭐ PUSH RIGHT */
+    margin-right: 0px;
 
-    margin-left: auto;
-    margin-right: 5px;
+    text-align: left;
 }
 
 .bot-bubble {
