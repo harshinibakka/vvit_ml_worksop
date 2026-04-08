@@ -35,8 +35,6 @@ if st.button("Predict Weather"):
     # Predictions
     temperature = weather_model.predict(temp_input)[0]
     rain_pred = rain_model.predict(rain_input)[0]
-
-    # Convert rain to probability (approx)
     rain_prob = rain_model.predict_proba(rain_input)[0][1]
 
     # Weather category logic (simple rule-based)
@@ -59,7 +57,7 @@ if st.button("Predict Weather"):
     st.subheader("🌤️ Weather Category")
     st.warning(category)
 
-     # 7-DAY FORECAST
+    # 7-DAY FORECAST
     st.subheader("📅 7-Day Forecast")
 
     future_data = []
