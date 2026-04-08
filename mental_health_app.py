@@ -141,8 +141,15 @@ if "user_state" not in st.session_state:
         "last_question": None
     }
 
+if "show_chart" not in st.session_state:
+    st.session_state.show_chart = True
+
 st.markdown("---")
 st.subheader("💬 Your Support Companion")
+
+if st.button("🧹 Clear Chat"):
+    st.session_state.chat_history = []
+    st.session_state.show_chart = True   # reset chart also
 
 # INPUT BOX
 user_input = st.text_input("", placeholder="Message your companion...", key="input_box")
@@ -177,23 +184,108 @@ def chatbot_reply(user_text):
     last_emotion = st.session_state.memory["emotion"]
     last_question = st.session_state.memory["last_question"]
 
-    # -----------------------------
-    # HANDLE SHORT REPLIES (YES/NO)
-    # -----------------------------
+    if last_question == "comfort" and text not in ["no", "not really"]:
+    return random.choice([
+        "I'm really glad you shared that 💙 What’s been on your mind?",
+        "Thank you for opening up… I’m here for you 💙",
+        "Take your time… tell me what you’re feeling 💙"
+    ])
+
     if text in ["yes", "yeah", "ok", "okay"]:
-        if last_question == "talk_more":
-            return "I’m here for you 💙 Tell me what’s been on your mind."
-
+    if last_question == "talk_more":
+        st.session_state.memory["last_question"] = "talk_more"
+        return random.choice([
+            "I'm here for you 💙 Tell me what's been on your mind.",
+            "Take your time… what would you like to share?",
+            "You can tell me anything… I'm listening 💙",
+            "I'm here with you… what’s been bothering you?",
+            "Go ahead… I’m listening 💙"
+        ])
+        
     if text in ["no", "not really"]:
-        return "That’s okay… we can just sit here for a bit 💙"
+    st.session_state.memory["last_question"] = "comfort"
 
-    # -----------------------------
+    return random.choice([
+        "That’s okay… you don’t have to share anything you’re not ready to 💙",
+        "No worries… we can just sit here for a moment together 💙",
+        "That’s completely okay… I’m still here with you 🤍",
+        "You don’t have to talk right now… I’m here whenever you feel ready 💙",
+        "It’s okay to take your time… you’re not alone 💙"
+    ])
+
+   
     # DETECT TOPIC
-    # -----------------------------
+
     if "future" in text:
         st.session_state.memory["topic"] = "future"
+        st.session_state.memory["last_question"] = "talk_more"
         return "Thinking about the future can feel heavy sometimes… what part worries you the most?"
+    
+    elif "study" in text or "exam" in text or "college" in text:
+        st.session_state.memory["topic"] = "studies"
+        st.session_state.memory["last_question"] = "talk_more"
+        return "Studies can feel really stressful… what part of it feels most overwhelming to you?"
+    
+    elif "family" in text or "parents" in text:
+        st.session_state.memory["topic"] = "family"
+        st.session_state.memory["last_question"] = "talk_more"
+        return "Family situations can be really emotional… do you want to tell me what’s going on?"
 
+    elif "friend" in text:
+         st.session_state.memory["topic"] = "friendship"
+         st.session_state.memory["last_question"] = "talk_more"
+         return "Friendship issues can really hurt...do you feellike you're being ignored or misunderstood?"
+    
+    elif "alone" in text or "lonely" in text:
+        st.session_state.memory["topic"] = "loneliness"
+        st.session_state.memory["last_question"] = "talk_more"
+        return "Feeling alone can be really hard… do you feel like you don’t have someone to talk to?"
+    
+    elif "relationship" in text or "love" in text:
+        st.session_state.memory["topic"] = "relationship"
+        st.session_state.memory["last_question"] = "talk_more"
+        return "Relationships can be confusing sometimes… what’s been on your mind?"
+
+    # REMEMBER PREVIOUS TOPIC
+
+    previous_topic = st.session_state.memory.get("topic")
+    
+    if previous_topic and previous_topic in text:
+        return f"Earlier you mentioned {previous_topic}… is that still bothering you?"
+
+    # CONTEXT-AWARE FOLLOW-UP
+
+    topic = st.session_state.memory.get("topic")
+    
+    if topic == "future":
+        return random.choice([
+            "It’s okay to feel uncertain about the future… is it about career or something else?",
+            "The future can feel scary… what part worries you the most right now?"
+        ])
+    
+    elif topic == "studies":
+        return random.choice([
+            "Studies can really build pressure… is it exams or understanding subjects?",
+            "That sounds stressful… are you feeling overwhelmed with workload?"
+        ])
+    
+    elif topic == "family":
+        return random.choice([
+            "Family situations can be tough… is it something someone said or ongoing stress?",
+            "I understand… family issues can feel heavy. Do you want to share what happened?"
+        ])
+    
+    elif topic == "loneliness":
+        return random.choice([
+            "Feeling lonely can be really painful… do you feel left out or disconnected?",
+            "I’m here with you… when do you feel this loneliness the most?"
+        ])
+    
+    elif topic == "relationship":
+        return random.choice([
+            "Relationships can be emotionally draining… what’s been bothering you?",
+            "Do you feel confused or hurt in this situation?"
+        ])
     # -----------------------------
     # EMOTION RESPONSES
     # -----------------------------
@@ -227,6 +319,9 @@ def chatbot_reply(user_text):
         followups = [
             "Do you want to tell me more?",
             "What’s been on your mind lately?",
+            "Can you share a bit more about that?",
+            "What part of this feels the hardest?",
+            "I'm here with you... tell me what you're thinking 💙"
             "I’m listening… 💙"
         ]
 
