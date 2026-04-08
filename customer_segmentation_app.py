@@ -1,37 +1,70 @@
-import streamlit as st
-import pickle
-import numpy as np
+#  Import libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from scipy.cluster.hierarchy import dendrogram, linkage
 
-# Load model
-with open("kmeans_model.pkl", "rb") as f:
-    model = pickle.load(f)
+# 📥 Load dataset
+df = pd.read_csv("Mall_Customers.csv")
 
-st.title("🛍️ Mall Customer Segmentation App")
+# 👀 View dataset
+print(df.head())
 
-st.write("Enter customer details to find their segment")
+# 🎯 Select features
+X = df[['Annual Income (k$)', 'Spending Score (1-100)']]
 
-# User inputs
-income = st.number_input("Annual Income (k$)", min_value=0)
-spending = st.number_input("Spending Score (1-100)", min_value=0, max_value=100)
+# =========================
+# 🔹 K-MEANS CLUSTERING
+# =========================
 
-# Predict
-if st.button("Find Customer Segment"):
-    data = np.array([[income, spending]])
-    cluster = model.predict(data)[0]
+# Elbow method to find optimal clusters
+wcss = []
+for i in range(1, 11):
+    kmeans = KMeans(n_clusters=i, random_state=42)
+    kmeans.fit(X)
+    wcss.append(kmeans.inertia_)
 
-    st.success(f"Cluster: {cluster}")
+# Plot Elbow graph
+plt.figure()
+plt.plot(range(1, 11), wcss)
+plt.title("Elbow Method")
+plt.xlabel("Number of clusters")
+plt.ylabel("WCSS")
+plt.show()
 
-    # Meaning of cluster
-    if cluster == 0:
-        st.info("Low Income, Low Spending")
-    elif cluster == 1:
-        st.info("High Income, High Spending (Premium Customers)")
-    elif cluster == 2:
-        st.info("High Income, Low Spending (Target Customers 🎯)")
-    elif cluster == 3:
-        st.info("Low Income, High Spending")
-    else:
-        st.info("Average Customers")
+# Apply KMeans (k=5)
+kmeans = KMeans(n_clusters=5, random_state=42)
+y_kmeans = kmeans.fit_predict(X)
 
-    st.markdown("### 💡 Insight")
-    st.write("High income but low spending customers are target customers for marketing.")
+# =========================
+# 📊 2D VISUALIZATION
+# =========================
+
+plt.figure()
+plt.scatter(X.iloc[:, 0], X.iloc[:, 1], c=y_kmeans, cmap='rainbow')
+plt.xlabel("Annual Income (k$)")
+plt.ylabel("Spending Score (1-100)")
+plt.title("Customer Segments (K-Means)")
+plt.show()
+
+# =========================
+# 🌳 HIERARCHICAL CLUSTERING
+# =========================
+
+Z = linkage(X, method='ward')
+
+plt.figure(figsize=(10, 5))
+dendrogram(Z)
+plt.title("Dendrogram (Hierarchical Clustering)")
+plt.xlabel("Customers")
+plt.ylabel("Distance")
+plt.show()
+
+# =========================
+# 💡 INSIGHTS
+# =========================
+
+print("\n💡 Insights:")
+print("High Income + High Spending → Premium Customers")
+print("Low Income + Low Spending → Low-value Customers")
+print("High Income + Low Spending → Target Customers 🎯")
