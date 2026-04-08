@@ -107,14 +107,14 @@ ax3.pie(rain_counts, labels=rain_counts.index, autopct='%1.1f%%')
 
 st.pyplot(fig3)
 
-    # EXTREME WEATHER
-    st.subheader("⚠️ Extreme Weather Detection")
+# EXTREME WEATHER
+st.subheader("⚠️ Extreme Weather Detection")
     
-    if temp_pred > 35:
-        st.error("🔥 Heatwave Warning!")
-    elif rain_prob > 0.7:
-        st.warning("🌧️ Heavy Rain Expected!")
-    elif wind_speed > 40:
-        st.warning("🌪️ Storm Alert!")
-    else:
-        st.success("✅ Weather conditions are normal")
+if temp_pred > 35:
+    st.error("🔥 Heatwave Warning!")
+elif rain_prob > 0.7:
+    st.warning("🌧️ Heavy Rain Expected!")
+elif wind_speed > 40:
+    st.warning("🌪️ Storm Alert!")
+else:
+    st.success("✅ Weather conditions are normal")
