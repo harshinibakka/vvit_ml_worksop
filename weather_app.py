@@ -134,14 +134,12 @@ if st.button("Predict Weather", key="btn2"):
 
     # EXTREME WEATHER
     st.subheader("⚠️ Extreme Weather Detection")
-
-    if 'temperature' in locals():
         
-        if temperature > 35:
-            st.error("🔥 Heatwave Warning!")
-        elif rain_prob > 0.7:
-            st.warning("🌧️ Heavy Rain Expected!")
-        elif wind_speed > 40:
-            st.warning("🌪️ Storm Alert!")
-        else:
-            st.success("✅ Weather conditions are normal")
+    if temperature > 35:
+        st.error("🔥 Heatwave Warning!")
+    elif rain_prob > 0.7:
+        st.warning("🌧️ Heavy Rain Expected!")
+    elif wind_speed > 40:
+        st.warning("🌪️ Storm Alert!")
+    else:
+        st.success("✅ Weather conditions are normal")
