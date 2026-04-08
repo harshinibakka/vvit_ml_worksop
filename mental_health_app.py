@@ -86,6 +86,34 @@ if st.button("Predict"):
 # Initialize memory
 import streamlit as st
 
+st.markdown("""
+<style>
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.user-bubble {
+    align-self: flex-end;
+    background-color: #2b313e;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 15px;
+    max-width: 70%;
+}
+
+.bot-bubble {
+    align-self: flex-start;
+    background-color: #444654;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 15px;
+    max-width: 70%;
+}
+</style>
+""", unsafe_allow_html=True)
+
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
@@ -102,7 +130,7 @@ st.markdown("---")
 st.subheader("💬 Your Support Companion")
 
 # INPUT BOX
-user_input = st.text_input("Talk to me... I'm here for you 🤍", key="input_box")
+user_input = st.text_input("", placeholder="Message your companion...", key="input_box")
 
 def detect_emotion(text):
     text = text.lower()
@@ -197,7 +225,7 @@ def chatbot_reply(user_text):
     st.session_state.memory["last_question"] = "talk_more"
     return "I’m here for you 💙 Tell me more about what you’re feeling."
 
-if st.button("Send 💬"):
+if st.button("Send ➤"):   
     if user_input and user_input.strip() != "":
         
         # Add user message FIRST
@@ -213,11 +241,15 @@ if st.button("Send 💬"):
 # DISPLAY CHAT
 # -----------------------------
 
+st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+
 for speaker, msg in st.session_state.chat_history:
     if speaker == "You":
-        st.write(f"🧍‍♀️ **You:** {msg}")
+        st.markdown(f'<div class="user-bubble">🧍‍♀️ {msg}</div>', unsafe_allow_html=True)
     else:
-        st.write(f"🤖 **Companion:** {msg}")
+        st.markdown(f'<div class="bot-bubble">🤖 {msg}</div>', unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)
 
 # ----------------------------
 # VISUALIZATION DASHBOARD
