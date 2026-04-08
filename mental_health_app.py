@@ -95,7 +95,7 @@ if "user_state" not in st.session_state:
         st.session_state.memory = {
         "emotion": None,
         "topic": None,
-        "last_user_input": ""
+        "last_question": None
     }
 
 st.markdown("---")
@@ -124,6 +124,7 @@ def detect_emotion(text):
 import random
 
 def chatbot_reply(user_text):
+    text = user_text.lower()
     emotion = detect_emotion(user_text)
 
     # store emotion
@@ -131,41 +132,69 @@ def chatbot_reply(user_text):
         st.session_state.memory["emotion"] = emotion
 
     last_emotion = st.session_state.memory["emotion"]
+    last_question = st.session_state.memory["last_question"]
 
+    # -----------------------------
+    # HANDLE SHORT REPLIES (YES/NO)
+    # -----------------------------
+    if text in ["yes", "yeah", "ok", "okay"]:
+        if last_question == "talk_more":
+            return "I’m here for you 💙 Tell me what’s been on your mind."
+
+    if text in ["no", "not really"]:
+        return "That’s okay… we can just sit here for a bit 💙"
+
+    # -----------------------------
+    # DETECT TOPIC
+    # -----------------------------
+    if "future" in text:
+        st.session_state.memory["topic"] = "future"
+        return "Thinking about the future can feel heavy sometimes… what part worries you the most?"
+
+    # -----------------------------
+    # EMOTION RESPONSES
+    # -----------------------------
     responses = {
         "stress": [
-            "That sounds really overwhelming 😔 What’s been stressing you the most?",
-            "You’ve been handling so much… I’m really proud of you 💙",
-            "Let’s slow down together 🌿 Want to talk about it?"
+            "That sounds really overwhelming 😔",
+            "You’ve been handling so much… 💙",
+            "That must feel really heavy…"
         ],
         "sad": [
             "I’m really sorry you’re feeling this way 💔",
-            "You don’t have to go through this alone… I’m here 🤍",
-            "Do you want to share what’s making you feel like this?"
+            "That sounds painful… I’m here 🤍"
         ],
         "anxiety": [
-            "Take a slow breath with me 🌿 You’re safe here.",
-            "It’s okay to feel this way… let’s go step by step 🤍",
-            "What’s worrying you right now?"
+            "It’s okay to feel this way… 🤍",
+            "Take a slow breath… you’re safe 🌿"
         ],
         "positive": [
-            "That’s really nice to hear 😊💙",
-            "I’m glad you’re feeling better 🌸",
-            "That made me smile too!"
+            "I’m really glad to hear that 😊",
+            "That’s nice… it made me smile too 🌸"
         ]
     }
 
+    # -----------------------------
+    # SMART RESPONSE BUILDING
+    # -----------------------------
     if last_emotion in responses:
-        return random.choice(responses[last_emotion])
+        base = random.choice(responses[last_emotion])
 
-    text = user_text.lower()
+        # add follow-up question (THIS is key)
+        followups = [
+            "Do you want to tell me more?",
+            "What’s been on your mind lately?",
+            "I’m listening… 💙"
+        ]
 
-    if "future" in text:
-        return "Thinking about the future can feel scary sometimes… what part worries you the most?"
+        st.session_state.memory["last_question"] = "talk_more"
 
-    if "thank" in text:
-        return "You don’t have to thank me… I’m here for you always 💙"
+        return base + " " + random.choice(followups)
 
+    # -----------------------------
+    # DEFAULT RESPONSE
+    # -----------------------------
+    st.session_state.memory["last_question"] = "talk_more"
     return "I’m here for you 💙 Tell me more about what you’re feeling."
 
 if st.button("send"):
