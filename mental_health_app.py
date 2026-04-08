@@ -95,7 +95,7 @@ st.markdown("""
 }
 
 .user-bubble {
-    align-self: flex-end;
+    align-self: left;
     background-color: #2b313e;
     color: white;
     padding: 10px 15px;
