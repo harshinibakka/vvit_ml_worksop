@@ -204,26 +204,26 @@ def chatbot_reply(user_text):
         ])
 
     if text in ["yes", "yeah", "ok", "okay"]:
-    if last_question == "talk_more":
-        st.session_state.memory["last_question"] = "talk_more"
-        return random.choice([
-            "I'm here for you 💙 Tell me what's been on your mind.",
-            "Take your time… what would you like to share?",
-            "You can tell me anything… I'm listening 💙",
-            "I'm here with you… what’s been bothering you?",
-            "Go ahead… I’m listening 💙"
-        ])
+        if last_question == "talk_more":
+            st.session_state.memory["last_question"] = "talk_more"
+            return random.choice([
+                "I'm here for you 💙 Tell me what's been on your mind.",
+                "Take your time… what would you like to share?",
+                "You can tell me anything… I'm listening 💙",
+                "I'm here with you… what’s been bothering you?",
+                "Go ahead… I’m listening 💙"
+            ])
         
     if text in ["no", "not really"]:
-    st.session_state.memory["last_question"] = "comfort"
-
-    return random.choice([
-        "That’s okay… you don’t have to share anything you’re not ready to 💙",
-        "No worries… we can just sit here for a moment together 💙",
-        "That’s completely okay… I’m still here with you 🤍",
-        "You don’t have to talk right now… I’m here whenever you feel ready 💙",
-        "It’s okay to take your time… you’re not alone 💙"
-    ])
+        st.session_state.memory["last_question"] = "comfort"
+    
+        return random.choice([
+            "That’s okay… you don’t have to share anything you’re not ready to 💙",
+            "No worries… we can just sit here for a moment together 💙",
+            "That’s completely okay… I’m still here with you 🤍",
+            "You don’t have to talk right now… I’m here whenever you feel ready 💙",
+            "It’s okay to take your time… you’re not alone 💙"
+        ])
 
    
     # DETECT TOPIC
