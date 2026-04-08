@@ -259,12 +259,20 @@ if st.button("Send ➤"):
 st.markdown('<div class="chat-container">', unsafe_allow_html=True)
 
 for speaker, msg in st.session_state.chat_history:
-    if speaker == "You":
-        st.markdown(f'<div class="user-bubble">🧍‍♀️ {msg}</div>', unsafe_allow_html=True)
-    else:
-        st.markdown(f'<div class="bot-bubble">🤖 {msg}</div>', unsafe_allow_html=True)
 
-st.markdown('</div>', unsafe_allow_html=True)
+    if speaker == "You":
+        st.markdown(f"""
+        <div style="display: flex; justify-content: flex-end; width: 100%;">
+            <div class="user-bubble">🧍 {msg}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    else:
+        st.markdown(f"""
+        <div style="display: flex; justify-content: flex-start; width: 100%;">
+            <div class="bot-bubble">🤖 {msg}</div>
+        </div>
+        """, unsafe_allow_html=True)
 
 # ----------------------------
 # VISUALIZATION DASHBOARD
