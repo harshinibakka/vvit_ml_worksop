@@ -26,7 +26,7 @@ wind_speed = st.slider("🌬️ Wind Speed (km/h)", 0, 50, 10)
 st.markdown("---")
 
 # PREDICT BUTTOn
-if st.button("Predict Weather"):
+if st.button("Predict Weather",  key="btn1"):
 
     # Prepare inputs
     temp_input = np.array([[humidity, wind_speed]])
@@ -107,14 +107,39 @@ ax3.pie(rain_counts, labels=rain_counts.index, autopct='%1.1f%%')
 
 st.pyplot(fig3)
 
-# EXTREME WEATHER
-st.subheader("⚠️ Extreme Weather Detection")
-    
-if temperature > 35:
-    st.error("🔥 Heatwave Warning!")
-elif rain_prob > 0.7:
-    st.warning("🌧️ Heavy Rain Expected!")
-elif wind_speed > 40:
-    st.warning("🌪️ Storm Alert!")
-else:
-    st.success("✅ Weather conditions are normal")
+if st.button("Predict Weather", key="btn2"):
+
+    temp_pred = weather_model.predict([[humidity, wind_speed]])[0]
+    rain_prob = rain_model.predict_proba([[humidity, wind_speed, 1]])[0][1]
+
+    # OUTPUT
+    st.subheader("🌡️ Predicted Temperature")
+    st.success(f"{temp_pred:.2f} °C")
+
+    st.subheader("🌧️ Rain Probability")
+    st.info(f"{rain_prob*100:.2f}% chance of rain")
+
+    # 7-DAY FORECAST
+    st.subheader("📅 7-Day Forecast")
+
+    future_data = []
+    for i in range(7):
+        future_data.append({
+            "Day": f"Day {i+1}",
+            "Temperature": round(temp_pred, 2),
+            "Rain %": round(rain_prob * 100, 2)
+        })
+
+    st.dataframe(pd.DataFrame(future_data))
+
+    # EXTREME WEATHER
+    st.subheader("⚠️ Extreme Weather Detection")
+        
+    if temperature > 35:
+        st.error("🔥 Heatwave Warning!")
+    elif rain_prob > 0.7:
+        st.warning("🌧️ Heavy Rain Expected!")
+    elif wind_speed > 40:
+        st.warning("🌪️ Storm Alert!")
+    else:
+        st.success("✅ Weather conditions are normal")
