@@ -110,7 +110,7 @@ st.pyplot(fig3)
 # EXTREME WEATHER
 st.subheader("⚠️ Extreme Weather Detection")
     
-if temp_pred > 35:
+if temperature > 35:
     st.error("🔥 Heatwave Warning!")
 elif rain_prob > 0.7:
     st.warning("🌧️ Heavy Rain Expected!")
