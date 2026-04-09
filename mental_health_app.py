@@ -484,6 +484,10 @@ def get_recommendation(risk):
             "impact": "Risk already low",
             "extra": "Continue good habits"
         }
+
+# Replace this later with your model prediction
+demo_risk= "High"
+
 rec = get_recommendation(demo_risk)
 
 st.write("Risk Level:", demo_risk)
