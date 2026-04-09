@@ -4,7 +4,5 @@ scikit-learn
 streamlit
 matplotlib
 seaborn
-altair<5
-standard-inghdr
 pyarrow
-openai
+
