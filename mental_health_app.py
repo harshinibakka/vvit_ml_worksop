@@ -62,7 +62,6 @@ if st.button("Predict"):
         proba = model.predict_proba(input_df)[0]
 
         if proba[1] > 0.6:
-            risk = "High"
             st.error("🔴 High Risk of Mental Health Issues")
             st.write("👉 Suggestions:")
             st.write("- Improve work-life balance")
@@ -70,7 +69,6 @@ if st.button("Predict"):
             st.write("- Talk to HR / support system")
 
         elif proba[1] > 0.4:
-            risk = "Medium"
             st.warning("🟡 Medium Risk of Mental Health Issues")
             st.write("👉 Suggestions:")
             st.write("- Take short breaks")
@@ -81,13 +79,6 @@ if st.button("Predict"):
             risk = "Low"
             st.success("🟢 Low Risk of Mental Health Issues")
             st.write("👉 Keep maintaining a healthy lifestyle 😊")
-
-        rec = get_recommendation(risk)
-
-        st.subheader("💡 Recommendation Engine")
-        st.write(f"Suggestion: {rec['message']}")
-        st.write(f"Impact: {rec['impact']}")
-        st.write(f"Extra Support: {rec['extra']}")
 
 # -----------------------------
 # FINAL SMART CHATBOT
