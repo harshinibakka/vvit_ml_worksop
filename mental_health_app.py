@@ -494,8 +494,6 @@ def get_recommendation(risk):
             "extra": "Continue good habits"
         }
 
-rec = get_recommendation(demo_risk)
-
 st.write("Risk Level:", demo_risk)
 st.write("Suggestion:", rec["message"])
 st.write("Impact:", rec["impact"])
