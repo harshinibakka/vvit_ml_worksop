@@ -5,6 +5,6 @@ streamlit
 matplotlib
 seaborn
 altair<5
-standard-imghdr
+standard-inghdr
 pyarrow
 openai
