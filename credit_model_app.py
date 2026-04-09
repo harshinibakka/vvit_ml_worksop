@@ -3,7 +3,7 @@ import numpy as np
 import pickle
 
 # Load the saved model
-model = pickle.load(open("credit_model.pkl", "rb"))
+model = pickle.load(open("credit_model.pkl(1)", "rb"))
 
 st.title("💳 AI Credit Score Classifier")
 
