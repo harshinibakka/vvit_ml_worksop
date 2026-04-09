@@ -3,7 +3,7 @@ import numpy as np
 import joblib
 
 # Load model
-model = joblib.load("credit_model.pkl")
+model = joblib.load("credit_model.pkl(1)")
 
 st.title("💳 Credit Score Predictor")
 
