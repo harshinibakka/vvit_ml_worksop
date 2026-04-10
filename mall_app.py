@@ -1,7 +1,10 @@
 import streamlit as st
 import numpy as np
 import pickle
+import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans  # IMPORTANT
+
 
 # Title
 st.title("🛍️ Mall Customer Clustering App")
@@ -40,3 +43,30 @@ if st.button("Find Customer Cluster"):
     # Insight
     st.markdown("### 💡 Insight")
     st.write("High income but low spending customers are target customers for marketing.")
+
+st.markdown("### 📊 Customer Segments Visualization")
+
+# Load dataset
+df = pd.read_csv("Mall_Customers.csv")
+
+# Select features
+X = df[['Annual Income (k$)', 'Spending Score (1-100)']]
+
+# Predict clusters
+clusters = model.predict(X)
+
+# Plot
+fig, ax = plt.subplots()
+
+scatter = ax.scatter(
+    X['Annual Income (k$)'],
+    X['Spending Score (1-100)'],
+    c=clusters
+)
+
+ax.set_xlabel("Annual Income (k$)")
+ax.set_ylabel("Spending Score")
+ax.set_title("Customer Segments")
+
+# Show in Streamlit
+st.pyplot(fig)
