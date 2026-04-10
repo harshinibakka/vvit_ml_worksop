@@ -494,6 +494,7 @@ st.write("Risk Level:", demo_risk)
 st.write("Suggestion:", rec["message"])
 st.write("Impact:", rec["impact"])
 st.write("Extra Support:", rec["extra"])
+
 # ----------------------------
 # BIAS DETECTION (IMPROVED)
 # ----------------------------
