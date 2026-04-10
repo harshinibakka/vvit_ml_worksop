@@ -465,33 +465,32 @@ st.pyplot(fig)
 
 st.subheader("💡 Recommendation Engine")
 
-def get_recommendation(risk, risk_percentage):
+def get_recommendation(risk):
     if risk == "High":
         return {
-            "message": "⚠️ Immediate attention needed. Reduce workload and seek support.",
-            "impact": f"Risk level is high ({risk_percentage:.2f}%)",
-            "extra": "Consider professional help and company support programs"
+            "message": "⚠️ Improve work-life balance and reduce workload",
+            "impact": "Reduces risk by 40%",
+            "extra": "Access company support programs"
         }
     elif risk == "Medium":
         return {
-            "message": "⚡ Try improving work-life balance and reduce stress",
-            "impact": f"Moderate risk detected ({risk_percentage:.2f}%)",
-            "extra": "Engage in wellness activities and talk to someone"
+            "message": "⚡ Try improving work-life balance",
+            "impact": "Reduces risk by 25%",
+            "extra": "Engage in wellness programs"
         }
     else:
         return {
             "message": "✅ Maintain your current healthy routine",
-            "impact": f"Low risk ({risk_percentage:.2f}%)",
-            "extra": "Continue good habits and stay connected"
+            "impact": "Risk already low",
+            "extra": "Continue good habits"
         }
 
-# Replace this later with your model prediction 
+# Replace this later with your model prediction
 demo_risk= "High"
 
-# ✅ Use REAL prediction
-rec = get_recommendation(risk, risk_percentage)
+rec = get_recommendation(demo_risk)
 
-st.write("Risk Level:", risk)
+st.write("Risk Level:", demo_risk)
 st.write("Suggestion:", rec["message"])
 st.write("Impact:", rec["impact"])
 st.write("Extra Support:", rec["extra"])
