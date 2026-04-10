@@ -94,7 +94,7 @@ if st.button("Predict"):
             risk = "Low"
             risk_level= "Low Risk"
             st.success("🟢 Low Risk of Mental Health Issues")
-            st.write("👉 Keep maintaining a healthy lifestyle 😊 ({risk_percentage:.2f}%)")
+            st.write("👉 Keep maintaining a healthy lifestyle 😊")
           
     st.session_state.risk = risk
     st.session_state.risk_percentage = risk_percentage
