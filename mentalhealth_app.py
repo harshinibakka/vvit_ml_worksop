@@ -95,6 +95,10 @@ if st.button("Predict"):
             risk_level= "Low Risk"
             st.success("🟢 Low Risk of Mental Health Issues")
             st.write("👉 Keep maintaining a healthy lifestyle 😊 ({risk_percentage:.2f}%)")
+          
+    st.session_state.risk = risk
+    st.session_state.risk_percentage = risk_percentage
+    st.session_state.risk_level = risk_level      
 
 # -----------------------------
 # FINAL SMART CHATBOT
@@ -501,7 +505,8 @@ def get_recommendation(risk):
             "extra": "Continue good habits"
         }
       
-if risk is not None:
+if "risk" in st.session_state:
+  
     rec = get_recommendation(risk)
 
     st.write("Risk Level:", risk_level)
