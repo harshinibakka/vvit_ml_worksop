@@ -30,6 +30,9 @@ care_options = st.selectbox("Care Options Available", ["Yes", "No"])
 # -----------------------------
 if st.button("Predict"):
 
+    risk = None
+    risk_percentage = 0
+
     # HIGH RISK (RULE)
     if family_history == "Yes" and work_interfere in ["Often", "Sometimes"]:
         st.error("🔴 High Risk of Mental Health Issues")
@@ -60,6 +63,15 @@ if st.button("Predict"):
         input_df = input_df.reindex(columns=columns, fill_value=0)
 
         proba = model.predict_proba(input_df)[0]
+
+        risk_percentage = proba[1] * 100
+
+        if risk_percentage >= 70:
+            risk = "High"
+        elif risk_percentage >= 40:
+            risk = "Medium"
+        else:
+            risk = "Low"
 
         if proba[1] > 0.6:
             st.error("🔴 High Risk of Mental Health Issues")
@@ -465,49 +477,33 @@ st.pyplot(fig)
 
 st.subheader("💡 Recommendation Engine")
 
-def get_recommendation(risk):
+def get_recommendation(risk, risk_percentage):
     if risk == "High":
         return {
-            "message": "⚠️ Improve work-life balance and reduce workload",
-            "impact": "Reduces risk by 40%",
-            "extra": "Access company support programs"
+            "message": "⚠️ Immediate attention needed. Reduce workload and seek support.",
+            "impact": f"Risk level is high ({risk_percentage:.2f}%)",
+            "extra": "Consider professional help and company support programs"
         }
     elif risk == "Medium":
         return {
-            "message": "⚡ Try improving work-life balance",
-            "impact": "Reduces risk by 25%",
-            "extra": "Engage in wellness programs"
+            "message": "⚡ Try improving work-life balance and reduce stress",
+            "impact": f"Moderate risk detected ({risk_percentage:.2f}%)",
+            "extra": "Engage in wellness activities and talk to someone"
         }
     else:
         return {
             "message": "✅ Maintain your current healthy routine",
-            "impact": "Risk already low",
-            "extra": "Continue good habits"
+            "impact": f"Low risk ({risk_percentage:.2f}%)",
+            "extra": "Continue good habits and stay connected"
         }
 
-# Replace this later with your model prediction
-demo_risk= "High"
+# ✅ Use REAL prediction
+rec = get_recommendation(risk, risk_percentage)
 
-rec = get_recommendation(demo_risk)
-
-st.write("Risk Level:", demo_risk)
+st.write("Risk Level:", risk)
 st.write("Suggestion:", rec["message"])
 st.write("Impact:", rec["impact"])
 st.write("Extra Support:", rec["extra"])
-
-# ----------------------------
-# BUSINESS INSIGHTS
-# ----------------------------
-
-st.subheader("📈 Business Insights")
-
-st.write("""
-- High work stress strongly increases mental health risk
-- Low company support leads to burnout
-- Remote work can increase isolation risk
-- Younger employees show higher stress variation
-""")
-
 # ----------------------------
 # BIAS DETECTION (IMPROVED)
 # ----------------------------
