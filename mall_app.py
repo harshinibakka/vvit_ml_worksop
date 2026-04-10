@@ -1,69 +1,42 @@
 import streamlit as st
-import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
+import pickle
+from sklearn.cluster import KMeans  # IMPORTANT
 
-# ----------------------------
 # Title
-# ----------------------------
 st.title("🛍️ Mall Customer Clustering App")
-st.write("Enter customer details and visualize customer clusters.")
 
-# ----------------------------
-# Input: Annual Income and Spending Score
-# ----------------------------
-income = st.number_input("Enter Annual Income (k$)", min_value=0, max_value=200, value=60)
-spending = st.slider("Select Spending Score (1-100)", 1, 100, value=50)
+st.write("Enter customer details to find their cluster")
 
-# ----------------------------
-# Example Dataset (simulate mall customers)
-# ----------------------------
-np.random.seed(42)
-income_data = np.random.randint(15, 140, 200)
-spending_data = np.random.randint(1, 100, 200)
-df = pd.DataFrame({'Income': income_data, 'Spending Score': spending_data})
+# Load model
+with open("kmeans_model.pkl", "rb") as f:
+    model = pickle.load(f)
 
-# Add current user input as a new row
-df_user = pd.DataFrame({'Income': [income], 'Spending Score': [spending]})
-df = pd.concat([df, df_user], ignore_index=True)
+# Inputs
+income = st.number_input("Annual Income (k$)", min_value=0)
+spending = st.number_input("Spending Score (1-100)", min_value=0, max_value=100)
 
-# ----------------------------
-# Scale Data
-# ----------------------------
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(df)
+# Button
+if st.button("Find Customer Cluster"):
 
-# ----------------------------
-# K-Means Clustering
-# ----------------------------
-n_clusters = st.sidebar.slider("Select number of clusters (K-Means)", 2, 10, 5)
-kmeans = KMeans(n_clusters=n_clusters, random_state=42)
-labels = kmeans.fit_predict(X_scaled)
-df['Cluster'] = labels
+    data = np.array([[income, spending]])
+    cluster = model.predict(data)[0]
 
-# ----------------------------
-# Visualization
-# ----------------------------
-st.subheader("📊 Customer Clusters (2D)")
+    # Output
+    st.success(f"Cluster: {cluster}")
 
-fig, ax = plt.subplots(figsize=(8,6))
-scatter = ax.scatter(df['Income'], df['Spending Score'], c=df['Cluster'], cmap='Set1', s=50)
-ax.set_xlabel("Income (k$)")
-ax.set_ylabel("Spending Score")
-ax.set_title("Customer Segmentation (K-Means)")
-legend1 = ax.legend(*scatter.legend_elements(), title="Clusters")
-ax.add_artist(legend1)
-st.pyplot(fig)
+    # Meaning
+    if cluster == 0:
+        st.info("Low Income, Low Spending")
+    elif cluster == 1:
+        st.info("High Income, High Spending (Premium Customers 💎)")
+    elif cluster == 2:
+        st.info("High Income, Low Spending (Target Customers 🎯)")
+    elif cluster == 3:
+        st.info("Low Income, High Spending")
+    else:
+        st.info("Average Customers")
 
-# ----------------------------
-# Show cluster of user input
-# ----------------------------
-user_label = df.iloc[-1]['Cluster']
-st.success(f"Your input belongs to **Cluster {user_label}**")
-
-# Optional: Show cluster characteristics
-cluster_info = df.groupby('Cluster')[['Income','Spending Score']].mean()
-st.write("Cluster centroids (average Income & Spending Score):")
-st.dataframe(cluster_info)
+    # Insight
+    st.markdown("### 💡 Insight")
+    st.write("High income but low spending customers are target customers for marketing.")
