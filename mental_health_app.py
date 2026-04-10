@@ -485,6 +485,9 @@ def get_recommendation(risk, risk_percentage):
             "extra": "Continue good habits and stay connected"
         }
 
+# Replace this later with your model prediction 
+demo_risk= "High"
+
 # ✅ Use REAL prediction
 rec = get_recommendation(risk, risk_percentage)
 
