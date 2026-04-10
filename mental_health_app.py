@@ -80,6 +80,18 @@ if st.button("Predict"):
             st.success("🟢 Low Risk of Mental Health Issues")
             st.write("👉 Keep maintaining a healthy lifestyle 😊")
 
+risk_percentage = prediction_proba[0][1] * 100
+
+if risk_percentage >= 70:
+    risk_level = "High Risk 🚨"
+elif risk_percentage >= 40:
+    risk_level = "Medium Risk ⚠️"
+else:
+    risk_level = "Low Risk 🌿"
+
+st.subheader("🧠 Mental Health Risk Level")
+st.error(f"{risk_level} ({risk_percentage:.2f}%)")
+    
 # -----------------------------
 # FINAL SMART CHATBOT
 # -----------------------------
