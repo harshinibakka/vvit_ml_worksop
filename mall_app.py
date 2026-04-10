@@ -31,9 +31,9 @@ if st.button("Find Customer Cluster"):
     elif cluster == 1:
         st.info("High Income, High Spending (Premium Customers 💎)")
     elif cluster == 2:
-        st.info("High Income, Low Spending (Target Customers 🎯)")
-    elif cluster == 3:
         st.info("Low Income, High Spending")
+    elif cluster == 3:
+        st.info("High Income, Low Spending (Target Customers 🎯)")
     else:
         st.info("Average Customers")
 
