@@ -30,9 +30,6 @@ care_options = st.selectbox("Care Options Available", ["Yes", "No"])
 # -----------------------------
 if st.button("Predict"):
 
-    risk = None
-    risk_percentage = 0
-
     # HIGH RISK (RULE)
     if family_history == "Yes" and work_interfere in ["Often", "Sometimes"]:
         st.error("🔴 High Risk of Mental Health Issues")
@@ -63,15 +60,6 @@ if st.button("Predict"):
         input_df = input_df.reindex(columns=columns, fill_value=0)
 
         proba = model.predict_proba(input_df)[0]
-
-        risk_percentage = proba[1] * 100
-
-        if risk_percentage >= 70:
-            risk = "High"
-        elif risk_percentage >= 40:
-            risk = "Medium"
-        else:
-            risk = "Low"
 
         if proba[1] > 0.6:
             st.error("🔴 High Risk of Mental Health Issues")
