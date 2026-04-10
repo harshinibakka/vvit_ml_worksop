@@ -64,6 +64,9 @@ scatter = ax.scatter(
     c=clusters
 )
 
+centers = model.cluster_centers_
+ax.scatter(centers[:, 0], centers[:, 1], c='red', s=200, marker='X')
+
 ax.set_xlabel("Annual Income (k$)")
 ax.set_ylabel("Spending Score")
 ax.set_title("Customer Segments")
