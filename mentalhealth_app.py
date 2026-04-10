@@ -72,19 +72,19 @@ if st.button("Predict"):
         proba = model.predict_proba(input_df)[0]
         risk_percentage = proba[1]*100
 
-        if proba[1] > 0.6:
+        if risk_percentage >= 70:
             risk = "High"
             risk_level= "High Risk"
-            st.error("🔴 High Risk of Mental Health Issues")
+            st.error("🔴 High Risk of Mental Health Issues ({risk_percentage:.2f}%)")
             st.write("👉 Suggestions:")
             st.write("- Improve work-life balance")
             st.write("- Seek professional help")
             st.write("- Talk to HR / support system")
 
-        elif proba[1] > 0.4:
+        elif risk_percentage >= 40:
             risk = "Medium"
             risk_level= "Medium Risk"
-            st.warning("🟡 Medium Risk of Mental Health Issues")
+            st.warning("🟡 Medium Risk of Mental Health Issues ({risk_percentage:.2f}%)")
             st.write("👉 Suggestions:")
             st.write("- Take short breaks")
             st.write("- Maintain work-life balance")
@@ -94,7 +94,7 @@ if st.button("Predict"):
             risk = "Low"
             risk_level= "Low Risk"
             st.success("🟢 Low Risk of Mental Health Issues")
-            st.write("👉 Keep maintaining a healthy lifestyle 😊")
+            st.write("👉 Keep maintaining a healthy lifestyle 😊 ({risk_percentage:.2f}%)")
 
 # -----------------------------
 # FINAL SMART CHATBOT
@@ -501,12 +501,14 @@ def get_recommendation(risk):
             "extra": "Continue good habits"
         }
       
-rec = get_recommendation(demo_risk)
+if risk is not None:
+    rec = get_recommendation(risk)
 
-st.write("Risk Level:", demo_risk)
-st.write("Suggestion:", rec["message"])
-st.write("Impact:", rec["impact"])
-st.write("Extra Support:", rec["extra"])
+    st.write("Risk Level:", risk_level)
+    st.write("Risk Percentage:", f"{risk_percentage:.2f}%")
+    st.write("Suggestion:", rec["message"])
+    st.write("Impact:", rec["impact"])
+    st.write("Extra Support:", rec["extra"])
 
 # ----------------------------
 # BIAS DETECTION (IMPROVED)
