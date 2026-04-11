@@ -52,6 +52,15 @@ This project aims to build an AI-powered system that predicts mental health risk
 ## 💻 Streamlit Application Features
 
 ### 🔹 Prediction System
+- Inputs :
+  - Age  
+  - Gender  
+  - Family History  
+  - Work Interference  
+  - Remote Work  
+  - Company Benefits  
+  - Care Options  
+
 - Outputs:
   - Risk Level (Low / Medium / High)  
   - Risk Percentage  
