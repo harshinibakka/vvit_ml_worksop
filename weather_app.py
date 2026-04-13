@@ -92,6 +92,7 @@ if st.button("Predict Weather"):
     if humidity < 30:
         temperature += 2
     elif humidity > 80:
+        temperature -= 2
         
     # -----------------------------
     # WEATHER CATEGORY
