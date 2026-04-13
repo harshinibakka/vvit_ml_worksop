@@ -34,18 +34,6 @@ humidity = st.slider("💧 Humidity (%)", 0, 100, 50)
 wind_speed = st.slider("🌬️ Wind Speed (km/h)", 0, 50, 10)
 
 st.markdown("---")
-
-# Adjust rain probability logically
-if humidity < 40:
-    rain_prob = rain_prob * 0.3
-elif humidity < 60:
-    rain_prob = rain_prob * 0.6
-
-# Adjust temperature logically
-if humidity < 30:
-    temperature += 2
-elif humidity > 80:
-    temperature -= 2
     
 # -----------------------------
 # PREDICTION
@@ -91,9 +79,20 @@ if st.button("Predict Weather"):
 
     if rain_prob is None:
         rain_prob = (humidity * 0.7 + wind_speed * 0.3) / 100
-
+ 
     rain_prob = min(rain_prob, 1.0)
 
+    # Adjust rain probability logically
+    if humidity < 40:
+        rain_prob = rain_prob * 0.3
+    elif humidity < 60:
+        rain_prob = rain_prob * 0.6
+    
+    # Adjust temperature logically
+    if humidity < 30:
+        temperature += 2
+    elif humidity > 80:
+        
     # -----------------------------
     # WEATHER CATEGORY
     # -----------------------------
