@@ -1,0 +1,97 @@
+ # 🌦️ Weather Prediction App
+
+## Problem Statement
+
+This project aims to build an AI-powered system that predicts weather conditions such as temperature, rain probability, and weather category based on environmental inputs. The system helps users plan their daily activities and prepare for extreme weather conditions.
+
+---
+
+## 📊 Dataset
+
+- Source: Weather History Dataset (CSV file)
+- Features include humidity, wind speed, temperature, and precipitation type
+
+---
+
+## ⚙️ Features Used
+
+- Humidity
+- Wind Speed
+- Date
+- Location
+
+---
+
+## ⚙️ System Workflow
+
+- User enters input through Streamlit interface
+- Data is passed to machine learning models
+- Temperature is predicted using ML model
+- Rain probability is calculated
+- Weather is classified into categories
+- Results are displayed
+
+---
+
+## 🤖 Models Used
+
+- Weather Model (`weather_model.pkl`) → Temperature prediction
+- Rain Model (`rain_model.pkl`) → Rain probability prediction
+
+---
+
+## 🔄 Prediction Logic
+
+- Temperature is predicted using trained model
+- If model fails → fallback logic is applied
+
+- Rain probability is predicted using probability model
+- If model fails → calculated using formula
+
+---
+
+## 📈 Output
+
+- Temperature (°C)
+- Rain Probability (%)
+- Weather Category (Sunny / Cloudy / Rainy / Heavy Rain)
+
+---
+
+## 📅 Additional Features
+
+- 7-Day Weather Forecast
+- Extreme Weather Detection (Heatwave, Storm, Heavy Rain)
+- Data Visualization (graphs and charts)
+
+---
+
+## 🚀 Advantages
+
+- Simple and user-friendly interface
+- Provides real-time predictions
+- Includes fallback logic for reliability
+- Helps in planning and decision making
+
+---
+
+## 🔮 Future Improvements
+
+- Integration with real-time weather APIs
+- Improved prediction accuracy
+- Mobile application development
+
+---
+
+## 🏁 Conclusion
+
+This system demonstrates how machine learning can be used to predict weather conditions effectively and assist users in planning their activities.
+
+---
+
+## 👩‍💻 Developed By
+
+- Bhavana
+- Priya dharshini 
+- Ramita
+- Sadha 
